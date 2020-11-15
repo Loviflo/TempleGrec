@@ -42,7 +42,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.set(0,600,1800);
+				camera.position.set(0,0,1800);
 
 				scene = new THREE.Scene();
 
@@ -50,6 +50,23 @@
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
 				const test = new THREE.TextureLoader().load('../three.js-master/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg');
 				const materialTest = new THREE.MeshBasicMaterial( { map: test } );
+
+				// Prisme à base triangulaire
+				// var shape = new THREE.Shape();
+				// shape.moveTo( 0,0 );
+				// shape.lineTo( 0, 2000 );
+				// shape.lineTo( 2000, 0 );
+				// shape.lineTo( 0, 0 );
+
+				// var extrudeSettings = {
+				// 	steps: 2,
+				// 	amount: 2,
+				// 	bevelEnabled: false,
+				// };			
+ 
+				// var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+				// var prism = new THREE.Mesh(geometry, material); 
+				// scene.add(prism);	
 
 				// Premier sol
 				const ground1 = new THREE.BoxBufferGeometry(1700,60,2700);
@@ -184,7 +201,8 @@
 
 				requestAnimationFrame( animate );
 
-				
+				camera.position.z += -1;
+				//camera.position.x += 0.2;
 
 				renderer.render( scene, camera );
 
