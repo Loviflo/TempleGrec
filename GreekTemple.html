@@ -15,7 +15,10 @@
 			let camera, scene, renderer;
 			let highCol;
             let lowCol;
-            let Col;
+			let Col;
+			let firstGround;
+			let secondGround;
+			let thirdGround;
 
 			init();
 			animate();
@@ -23,20 +26,26 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.z = 500;
+				camera.position.z = 1000;
 
 				scene = new THREE.Scene();
 
 				const texture = new THREE.TextureLoader().load( '../three.js-master/examples/textures/black-marble.webp' );
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
+
+				const ground1 = new THREE.BoxBufferGeometry(1000,60,2000);
+				firstGround = new THREE.Mesh(ground1, material);
+				firstGround.position.y = -250;
+				firstGround.position.z = -1000;
+				scene.add(firstGround);
                 
-                const geometry1 = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				lowCol = new THREE.Mesh( geometry1, material );
-                lowCol.position.y = -160;
+                const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
+				lowCol = new THREE.Mesh( bottom, material );
+                lowCol.position.y = -180;
                 scene.add( lowCol );
 
-                const geometry2 = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				highCol = new THREE.Mesh( geometry2, material );
+                const top = new THREE.BoxBufferGeometry( 200, 40, 200 );
+				highCol = new THREE.Mesh( top, material );
                 highCol.position.y = 200;
 				scene.add( highCol );
 
