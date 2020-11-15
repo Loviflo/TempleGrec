@@ -34,6 +34,7 @@
 			let firstGround;
 			let secondGround;
 			let thirdGround;
+			let roofMesh;
 
 			init();
 			animate();
@@ -41,7 +42,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.set(0,200,1100);
+				camera.position.set(0,600,1800);
 
 				scene = new THREE.Scene();
 
@@ -62,13 +63,20 @@
 				secondGround.position.set(0,-330,-1250);
 				scene.add(secondGround);
 
-				// Colonne n°1
 				// Troisième sol
 				const ground3 = new THREE.BoxBufferGeometry(1800,60,2800);
 				thirdGround = new THREE.Mesh(ground3, material);
 				thirdGround.position.set(0,-390,-1250);
 				scene.add(thirdGround);
+
+				// Toit
+				const roof = new THREE.BoxBufferGeometry(1700,100,2700);
+				roofMesh = new THREE.Mesh(roof, material);
+				roofMesh.position.set(0,290,-1250);
+				scene.add(roofMesh);
+
                 
+				// Colonne n°1
 				// Le bas de la colonne
                 const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
 				bottomCol = new THREE.Mesh( bottom, materialTest );
