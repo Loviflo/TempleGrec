@@ -27,20 +27,32 @@
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
 				camera.position.z = 3000;
-				camera.position.set(0,100,800);
+				camera.position.set(0,0,800);
 
 				scene = new THREE.Scene();
 
 				const texture = new THREE.TextureLoader().load( '../three.js-master/examples/textures/black-marble.webp' );
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
 				const test = new THREE.TextureLoader().load('../three.js-master/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg');
-				const materialTest = new THREE.MeshBasicMaterial( {map: test} );
+				const materialTest = new THREE.MeshBasicMaterial( { map: test } );
 
 				const ground1 = new THREE.BoxBufferGeometry(1000,60,2000);
 				firstGround = new THREE.Mesh(ground1, material);
 				firstGround.position.y = -270;
 				firstGround.position.z = -900;
 				scene.add(firstGround);
+
+				const ground2 = new THREE.BoxBufferGeometry(1050,60,2050);
+				secondGround = new THREE.Mesh(ground2, materialTest);
+				secondGround.position.y = -330;
+				secondGround.position.z = -900;
+				scene.add(secondGround);
+
+				const ground3 = new THREE.BoxBufferGeometry(1100,60,2100);
+				thirdGround = new THREE.Mesh(ground3, material);
+				thirdGround.position.y = -390;
+				thirdGround.position.z = -900;
+				scene.add(thirdGround);
                 
                 const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
 				lowCol = new THREE.Mesh( bottom, materialTest );
