@@ -13,9 +13,24 @@
 			import * as THREE from '../three.js-master/build/three.module.js';
 			
 			let camera, scene, renderer;
-			let highCol;
-            let lowCol;
+			let topCol;
+            let bottomCol;
 			let Col;
+			let topCol2;
+            let bottomCol2;
+			let Col2;
+			let topCol3;
+            let bottomCol3;
+			let Col3;
+			let topCol4;
+            let bottomCol4;
+			let Col4;
+			let topCol5;
+            let bottomCol5;
+			let Col5;
+			let topCol6;
+            let bottomCol6;
+			let Col6;
 			let firstGround;
 			let secondGround;
 			let thirdGround;
@@ -26,8 +41,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.z = 3000;
-				camera.position.set(0,0,800);
+				camera.position.set(0,200,1100);
 
 				scene = new THREE.Scene();
 
@@ -36,37 +50,107 @@
 				const test = new THREE.TextureLoader().load('../three.js-master/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg');
 				const materialTest = new THREE.MeshBasicMaterial( { map: test } );
 
-				const ground1 = new THREE.BoxBufferGeometry(1000,60,2000);
+				// Premier sol
+				const ground1 = new THREE.BoxBufferGeometry(1700,60,2700);
 				firstGround = new THREE.Mesh(ground1, material);
-				firstGround.position.y = -270;
-				firstGround.position.z = -900;
+				firstGround.position.set(0,-270,-1250);
 				scene.add(firstGround);
 
-				const ground2 = new THREE.BoxBufferGeometry(1050,60,2050);
+				// Deuxième sol
+				const ground2 = new THREE.BoxBufferGeometry(1750,60,2750);
 				secondGround = new THREE.Mesh(ground2, materialTest);
-				secondGround.position.y = -330;
-				secondGround.position.z = -900;
+				secondGround.position.set(0,-330,-1250);
 				scene.add(secondGround);
 
-				const ground3 = new THREE.BoxBufferGeometry(1100,60,2100);
+				// Colonne n°1
+				// Troisième sol
+				const ground3 = new THREE.BoxBufferGeometry(1800,60,2800);
 				thirdGround = new THREE.Mesh(ground3, material);
-				thirdGround.position.y = -390;
-				thirdGround.position.z = -900;
+				thirdGround.position.set(0,-390,-1250);
 				scene.add(thirdGround);
                 
+				// Le bas de la colonne
                 const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				lowCol = new THREE.Mesh( bottom, materialTest );
-                lowCol.position.y = -220;
-                scene.add( lowCol );
+				bottomCol = new THREE.Mesh( bottom, materialTest );
+                bottomCol.position.set(-750,-220,0);
+                scene.add( bottomCol );
 
+				// Le haut de la colonne
                 const top = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				highCol = new THREE.Mesh( top, material );
-                highCol.position.y = 220;
-				scene.add( highCol );
+				topCol = new THREE.Mesh( top, materialTest );
+                topCol.position.set(-750,220,0);
+				scene.add( topCol );
 
+				// La colonne
                 const column = new THREE.CylinderBufferGeometry(50,50,400,320);
                 Col = new THREE.Mesh( column, material );
-                scene.add( Col );
+				Col.position.set(-750,0,0);
+				scene.add( Col );
+				
+				// Colonne n°2
+				bottomCol2 = new THREE.Mesh(bottom, materialTest);
+				bottomCol2.position.set(-450,-220,0);
+				scene.add(bottomCol2);
+
+				topCol2 = new THREE.Mesh(bottom, materialTest);
+				topCol2.position.set(-450,220,0);
+				scene.add(topCol2);
+
+				Col2 = new THREE.Mesh(column, material);
+				Col2.position.set(-450,0,0);
+				scene.add(Col2);
+
+				// Colonne n°3
+				bottomCol3 = new THREE.Mesh(bottom, materialTest);
+				bottomCol3.position.set(-150,-220,0);
+				scene.add(bottomCol3);
+
+				topCol3 = new THREE.Mesh(bottom, materialTest);
+				topCol3.position.set(-150,220,0);
+				scene.add(topCol3);
+
+				Col3 = new THREE.Mesh(column, material);
+				Col3.position.set(-150,0,0);
+				scene.add(Col3);
+
+				// Colonne n°4
+				bottomCol4 = new THREE.Mesh(bottom, materialTest);
+				bottomCol4.position.set(150,-220,0);
+				scene.add(bottomCol4);
+
+				topCol4 = new THREE.Mesh(bottom, materialTest);
+				topCol4.position.set(150,220,0);
+				scene.add(topCol4);
+
+				Col4 = new THREE.Mesh(column, material);
+				Col4.position.set(150,0,0);
+				scene.add(Col4);
+
+				// Colonne n°5
+				bottomCol5 = new THREE.Mesh(bottom, materialTest);
+				bottomCol5.position.set(450,-220,0);
+				scene.add(bottomCol5);
+
+				topCol5 = new THREE.Mesh(bottom, materialTest);
+				topCol5.position.set(450,220,0);
+				scene.add(topCol5);
+
+				Col5 = new THREE.Mesh(column, material);
+				Col5.position.set(450,0,0);
+				scene.add(Col5);
+
+				// Colonne n°6
+				bottomCol6 = new THREE.Mesh(bottom, materialTest);
+				bottomCol6.position.set(750,-220,0);
+				scene.add(bottomCol6);
+
+				topCol6 = new THREE.Mesh(bottom, materialTest);
+				topCol6.position.set(750,220,0);
+				scene.add(topCol6);
+
+				Col6 = new THREE.Mesh(column, material);
+				Col6.position.set(750,0,0);
+				scene.add(Col6);
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
