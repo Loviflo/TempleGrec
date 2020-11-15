@@ -25,33 +25,35 @@
 
 			function init() {
 
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.z = 1000;
+				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
+				camera.position.z = 3000;
+				camera.position.set(0,100,800);
 
 				scene = new THREE.Scene();
 
 				const texture = new THREE.TextureLoader().load( '../three.js-master/examples/textures/black-marble.webp' );
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
+				const test = new THREE.TextureLoader().load('../three.js-master/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg');
+				const materialTest = new THREE.MeshBasicMaterial( {map: test} );
 
 				const ground1 = new THREE.BoxBufferGeometry(1000,60,2000);
 				firstGround = new THREE.Mesh(ground1, material);
-				firstGround.position.y = -250;
-				firstGround.position.z = -1000;
+				firstGround.position.y = -270;
+				firstGround.position.z = -900;
 				scene.add(firstGround);
                 
                 const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				lowCol = new THREE.Mesh( bottom, material );
-                lowCol.position.y = -180;
+				lowCol = new THREE.Mesh( bottom, materialTest );
+                lowCol.position.y = -220;
                 scene.add( lowCol );
 
                 const top = new THREE.BoxBufferGeometry( 200, 40, 200 );
 				highCol = new THREE.Mesh( top, material );
-                highCol.position.y = 200;
+                highCol.position.y = 220;
 				scene.add( highCol );
 
                 const column = new THREE.CylinderBufferGeometry(50,50,400,320);
                 Col = new THREE.Mesh( column, material );
-                Col.position.y = 0;
                 scene.add( Col );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -77,6 +79,9 @@
 			function animate() {
 
 				requestAnimationFrame( animate );
+
+				
+
 				renderer.render( scene, camera );
 
 			}
