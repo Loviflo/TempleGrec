@@ -72,25 +72,25 @@
 
 				// Premier sol
 				const ground1 = new THREE.BoxBufferGeometry(1700,60,2700);
-				firstGround = new THREE.Mesh(ground1, material);
+				firstGround = new THREE.Mesh(ground1, columnG);
 				firstGround.position.set(0,-370,-1250);
 				scene.add(firstGround);
 
 				// Deuxième sol
 				const ground2 = new THREE.BoxBufferGeometry(1750,60,2750);
-				secondGround = new THREE.Mesh(ground2, materialTest);
+				secondGround = new THREE.Mesh(ground2, columnG);
 				secondGround.position.set(0,-430,-1250);
 				scene.add(secondGround);
 
 				// Troisième sol
 				const ground3 = new THREE.BoxBufferGeometry(1800,60,2800);
-				thirdGround = new THREE.Mesh(ground3, material);
+				thirdGround = new THREE.Mesh(ground3, columnG);
 				thirdGround.position.set(0,-490,-1250);
 				scene.add(thirdGround);
 
 				// Toit
 				const roof = new THREE.BoxBufferGeometry(1700,100,2700);
-				roofMesh = new THREE.Mesh(roof, material);
+				roofMesh = new THREE.Mesh(roof, columnG);
 				roofMesh.position.set(0,390,-1250);
 				scene.add(roofMesh);
 
