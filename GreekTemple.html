@@ -14,22 +14,16 @@
 			
 			let camera, scene, renderer;
 			let topCol;
-            let bottomCol;
 			let Col;
 			let topCol2;
-            let bottomCol2;
 			let Col2;
 			let topCol3;
-            let bottomCol3;
 			let Col3;
 			let topCol4;
-            let bottomCol4;
 			let Col4;
 			let topCol5;
-            let bottomCol5;
 			let Col5;
 			let topCol6;
-            let bottomCol6;
 			let Col6;
 			let firstGround;
 			let secondGround;
@@ -39,6 +33,16 @@
 			let widthCC = 200;
 			let heightCC = 40;
 			let depthCC = 200; 
+			// Hauteur sous plafond
+			let ceilingHeight = 740;
+			// Dimensions de la dalle et du toit
+			let widthG = 1700;
+			let heightG = 60;
+			let depthG = 3800;
+			let heightR = 100;
+			// Delta
+			let deltaWidthP = 30;
+			let distCol = 300;
 
 			init();
 			animate();
@@ -46,7 +50,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.set(0,0,1500);
+				camera.position.set(850,800,1500);
 
 				scene = new THREE.Scene();
 
@@ -59,129 +63,104 @@
 
 				//Prisme à base triangulaire
 				const shape = new THREE.Shape();
-				shape.moveTo( -850,440 );
-				shape.lineTo( 850, 440 );
-				shape.lineTo( 0, 700 );
+				shape.moveTo( -deltaWidthP,ceilingHeight+heightR);
+				shape.lineTo( widthG+2*deltaWidthP,ceilingHeight+heightR);
+				shape.lineTo( widthG/2, ceilingHeight+heightR + 250 );
 
 				const extrudeSettings = {
 					steps: 1,
-					depth: 2800,
+					depth: depthG,
 					bevelEnabled: false,
 				};			
  
 				var geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
 				var prism = new THREE.Mesh(geometry, material); 
-				prism.position.z = -2700;
+				prism.position.z = -depthG;
 				scene.add(prism);	
 
 				// Premier sol
-				const ground1 = new THREE.BoxBufferGeometry(1700,60,2700);
+				const ground1 = new THREE.BoxBufferGeometry(widthG,heightG,depthG);
 				firstGround = new THREE.Mesh(ground1, columnG);
-				firstGround.position.set(0,-370,-1250);
+				firstGround.position.set(widthG/2,-30,-(depthG/2));
 				scene.add(firstGround);
 
 				// Deuxième sol
-				const ground2 = new THREE.BoxBufferGeometry(1750,60,2750);
+				const ground2 = new THREE.BoxBufferGeometry(widthG+50,heightG,depthG+50);
 				secondGround = new THREE.Mesh(ground2, columnG);
-				secondGround.position.set(0,-430,-1250);
+				secondGround.position.set(widthG/2,-90,-(depthG/2));
 				scene.add(secondGround);
 
 				// Troisième sol
-				const ground3 = new THREE.BoxBufferGeometry(1800,60,2800);
+				const ground3 = new THREE.BoxBufferGeometry(widthG+100,heightG,depthG+100);
 				thirdGround = new THREE.Mesh(ground3, columnG);
-				thirdGround.position.set(0,-490,-1250);
+				thirdGround.position.set(widthG/2,-150,-(depthG/2));
 				scene.add(thirdGround);
 
 				// Toit
-				const roof = new THREE.BoxBufferGeometry(1700,330,2700);
+				const roof = new THREE.BoxBufferGeometry(widthG,heightR,depthG);
 				roofMesh = new THREE.Mesh(roof, columnG);
-				roofMesh.position.set(0,390,-1250);
+				roofMesh.position.set(widthG/2,ceilingHeight + heightR/2,-(depthG/2));
 				scene.add(roofMesh);
 
                 
 				// Colonne n°1
-				// Le bas de la colonne
-                const bottom = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
-				bottomCol = new THREE.Mesh( bottom, columnG );
-                bottomCol.position.set(-750,-320,0);
-                scene.add( bottomCol );
-
 				// Le haut de la colonne
                 const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
 				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(-750,320,0);
+                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2));
 				scene.add( topCol );
 
 				// La colonne
-                const column = new THREE.CylinderBufferGeometry(50,70,600,320);
+                const column = new THREE.CylinderBufferGeometry(50,75,ceilingHeight-heightCC,320);
                 Col = new THREE.Mesh( column, columnG );
-				Col.position.set(-750,0,0);
+				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2));
 				scene.add( Col );
 				
 				// Colonne n°2
-				bottomCol2 = new THREE.Mesh(bottom, columnG);
-				bottomCol2.position.set(-450,-320,0);
-				scene.add(bottomCol2);
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthCC/2 + 1*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+				scene.add( topCol );
 
-				topCol2 = new THREE.Mesh(bottom, columnG);
-				topCol2.position.set(-450,320,0);
-				scene.add(topCol2);
+				Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthCC/2 + 1*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+				scene.add( Col );
 
-				Col2 = new THREE.Mesh(column, columnG);
-				Col2.position.set(-450,0,0);
-				scene.add(Col2);
 
 				// Colonne n°3
-				bottomCol3 = new THREE.Mesh(bottom, columnG);
-				bottomCol3.position.set(-150,-320,0);
-				scene.add(bottomCol3);
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthCC/2 + 2*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+				scene.add( topCol );
 
-				topCol3 = new THREE.Mesh(bottom, columnG);
-				topCol3.position.set(-150,320,0);
-				scene.add(topCol3);
-
-				Col3 = new THREE.Mesh(column, columnG);
-				Col3.position.set(-150,0,0);
-				scene.add(Col3);
+				Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthCC/2 + 2*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+				scene.add( Col );
 
 				// Colonne n°4
-				bottomCol4 = new THREE.Mesh(bottom, columnG);
-				bottomCol4.position.set(150,-320,0);
-				scene.add(bottomCol4);
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthCC/2 + 3*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+				scene.add( topCol );
 
-				topCol4 = new THREE.Mesh(bottom, columnG);
-				topCol4.position.set(150,320,0);
-				scene.add(topCol4);
-
-				Col4 = new THREE.Mesh(column, columnG);
-				Col4.position.set(150,0,0);
-				scene.add(Col4);
+				Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthCC/2 + 3*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+				scene.add( Col );
 
 				// Colonne n°5
-				bottomCol5 = new THREE.Mesh(bottom, columnG);
-				bottomCol5.position.set(450,-320,0);
-				scene.add(bottomCol5);
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthCC/2 + 4*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+				scene.add( topCol );
 
-				topCol5 = new THREE.Mesh(bottom, columnG);
-				topCol5.position.set(450,320,0);
-				scene.add(topCol5);
-
-				Col5 = new THREE.Mesh(column, columnG);
-				Col5.position.set(450,0,0);
-				scene.add(Col5);
+				Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthCC/2 + 4*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+				scene.add( Col );
 
 				// Colonne n°6
-				bottomCol6 = new THREE.Mesh(bottom, columnG);
-				bottomCol6.position.set(750,-320,0);
-				scene.add(bottomCol6);
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthCC/2 + 5*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+				scene.add( topCol );
 
-				topCol6 = new THREE.Mesh(bottom, columnG);
-				topCol6.position.set(750,320,0);
-				scene.add(topCol6);
-
-				Col6 = new THREE.Mesh(column, columnG);
-				Col6.position.set(750,0,0);
-				scene.add(Col6);
+				Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthCC/2 + 5*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+				scene.add( Col );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
