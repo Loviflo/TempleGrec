@@ -50,6 +50,8 @@
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
 				const test = new THREE.TextureLoader().load('../three.js-master/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg');
 				const materialTest = new THREE.MeshBasicMaterial( { map: test } );
+				const ColumnGreek = new THREE.TextureLoader().load('../three.js-master/examples/textures/Greek/columnGreek3.jpg');
+				const columnG = new THREE.MeshBasicMaterial( { map: ColumnGreek } );
 
 				// Prisme à base triangulaire
 				// var shape = new THREE.Shape();
@@ -71,109 +73,109 @@
 				// Premier sol
 				const ground1 = new THREE.BoxBufferGeometry(1700,60,2700);
 				firstGround = new THREE.Mesh(ground1, material);
-				firstGround.position.set(0,-270,-1250);
+				firstGround.position.set(0,-370,-1250);
 				scene.add(firstGround);
 
 				// Deuxième sol
 				const ground2 = new THREE.BoxBufferGeometry(1750,60,2750);
 				secondGround = new THREE.Mesh(ground2, materialTest);
-				secondGround.position.set(0,-330,-1250);
+				secondGround.position.set(0,-430,-1250);
 				scene.add(secondGround);
 
 				// Troisième sol
 				const ground3 = new THREE.BoxBufferGeometry(1800,60,2800);
 				thirdGround = new THREE.Mesh(ground3, material);
-				thirdGround.position.set(0,-390,-1250);
+				thirdGround.position.set(0,-490,-1250);
 				scene.add(thirdGround);
 
 				// Toit
 				const roof = new THREE.BoxBufferGeometry(1700,100,2700);
 				roofMesh = new THREE.Mesh(roof, material);
-				roofMesh.position.set(0,290,-1250);
+				roofMesh.position.set(0,390,-1250);
 				scene.add(roofMesh);
 
                 
 				// Colonne n°1
 				// Le bas de la colonne
                 const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				bottomCol = new THREE.Mesh( bottom, materialTest );
-                bottomCol.position.set(-750,-220,0);
+				bottomCol = new THREE.Mesh( bottom, columnG );
+                bottomCol.position.set(-750,-320,0);
                 scene.add( bottomCol );
 
 				// Le haut de la colonne
                 const top = new THREE.BoxBufferGeometry( 200, 40, 200 );
-				topCol = new THREE.Mesh( top, materialTest );
-                topCol.position.set(-750,220,0);
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(-750,320,0);
 				scene.add( topCol );
 
 				// La colonne
-                const column = new THREE.CylinderBufferGeometry(50,50,400,320);
-                Col = new THREE.Mesh( column, material );
+                const column = new THREE.CylinderBufferGeometry(50,50,600,320);
+                Col = new THREE.Mesh( column, columnG );
 				Col.position.set(-750,0,0);
 				scene.add( Col );
 				
 				// Colonne n°2
-				bottomCol2 = new THREE.Mesh(bottom, materialTest);
-				bottomCol2.position.set(-450,-220,0);
+				bottomCol2 = new THREE.Mesh(bottom, columnG);
+				bottomCol2.position.set(-450,-320,0);
 				scene.add(bottomCol2);
 
-				topCol2 = new THREE.Mesh(bottom, materialTest);
-				topCol2.position.set(-450,220,0);
+				topCol2 = new THREE.Mesh(bottom, columnG);
+				topCol2.position.set(-450,320,0);
 				scene.add(topCol2);
 
-				Col2 = new THREE.Mesh(column, material);
+				Col2 = new THREE.Mesh(column, columnG);
 				Col2.position.set(-450,0,0);
 				scene.add(Col2);
 
 				// Colonne n°3
-				bottomCol3 = new THREE.Mesh(bottom, materialTest);
-				bottomCol3.position.set(-150,-220,0);
+				bottomCol3 = new THREE.Mesh(bottom, columnG);
+				bottomCol3.position.set(-150,-320,0);
 				scene.add(bottomCol3);
 
-				topCol3 = new THREE.Mesh(bottom, materialTest);
-				topCol3.position.set(-150,220,0);
+				topCol3 = new THREE.Mesh(bottom, columnG);
+				topCol3.position.set(-150,320,0);
 				scene.add(topCol3);
 
-				Col3 = new THREE.Mesh(column, material);
+				Col3 = new THREE.Mesh(column, columnG);
 				Col3.position.set(-150,0,0);
 				scene.add(Col3);
 
 				// Colonne n°4
-				bottomCol4 = new THREE.Mesh(bottom, materialTest);
-				bottomCol4.position.set(150,-220,0);
+				bottomCol4 = new THREE.Mesh(bottom, columnG);
+				bottomCol4.position.set(150,-320,0);
 				scene.add(bottomCol4);
 
-				topCol4 = new THREE.Mesh(bottom, materialTest);
-				topCol4.position.set(150,220,0);
+				topCol4 = new THREE.Mesh(bottom, columnG);
+				topCol4.position.set(150,320,0);
 				scene.add(topCol4);
 
-				Col4 = new THREE.Mesh(column, material);
+				Col4 = new THREE.Mesh(column, columnG);
 				Col4.position.set(150,0,0);
 				scene.add(Col4);
 
 				// Colonne n°5
-				bottomCol5 = new THREE.Mesh(bottom, materialTest);
-				bottomCol5.position.set(450,-220,0);
+				bottomCol5 = new THREE.Mesh(bottom, columnG);
+				bottomCol5.position.set(450,-320,0);
 				scene.add(bottomCol5);
 
-				topCol5 = new THREE.Mesh(bottom, materialTest);
-				topCol5.position.set(450,220,0);
+				topCol5 = new THREE.Mesh(bottom, columnG);
+				topCol5.position.set(450,320,0);
 				scene.add(topCol5);
 
-				Col5 = new THREE.Mesh(column, material);
+				Col5 = new THREE.Mesh(column, columnG);
 				Col5.position.set(450,0,0);
 				scene.add(Col5);
 
 				// Colonne n°6
-				bottomCol6 = new THREE.Mesh(bottom, materialTest);
-				bottomCol6.position.set(750,-220,0);
+				bottomCol6 = new THREE.Mesh(bottom, columnG);
+				bottomCol6.position.set(750,-320,0);
 				scene.add(bottomCol6);
 
-				topCol6 = new THREE.Mesh(bottom, materialTest);
-				topCol6.position.set(750,220,0);
+				topCol6 = new THREE.Mesh(bottom, columnG);
+				topCol6.position.set(750,320,0);
 				scene.add(topCol6);
 
-				Col6 = new THREE.Mesh(column, material);
+				Col6 = new THREE.Mesh(column, columnG);
 				Col6.position.set(750,0,0);
 				scene.add(Col6);
 
@@ -181,8 +183,6 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
-
-				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
@@ -201,7 +201,7 @@
 
 				requestAnimationFrame( animate );
 
-				camera.position.z += -1;
+				//camera.position.z += -1;
 				//camera.position.x += 0.2;
 
 				renderer.render( scene, camera );
