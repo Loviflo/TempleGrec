@@ -35,6 +35,10 @@
 			let secondGround;
 			let thirdGround;
 			let roofMesh;
+			// Dimensions cube colonnes
+			let widthCC = 200;
+			let heightCC = 40;
+			let depthCC = 200; 
 
 			init();
 			animate();
@@ -89,7 +93,7 @@
 				scene.add(thirdGround);
 
 				// Toit
-				const roof = new THREE.BoxBufferGeometry(1700,100,2700);
+				const roof = new THREE.BoxBufferGeometry(1700,330,2700);
 				roofMesh = new THREE.Mesh(roof, columnG);
 				roofMesh.position.set(0,390,-1250);
 				scene.add(roofMesh);
@@ -97,19 +101,19 @@
                 
 				// Colonne n°1
 				// Le bas de la colonne
-                const bottom = new THREE.BoxBufferGeometry( 200, 40, 200 );
+                const bottom = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
 				bottomCol = new THREE.Mesh( bottom, columnG );
                 bottomCol.position.set(-750,-320,0);
                 scene.add( bottomCol );
 
 				// Le haut de la colonne
-                const top = new THREE.BoxBufferGeometry( 200, 40, 200 );
+                const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
 				topCol = new THREE.Mesh( top, columnG );
                 topCol.position.set(-750,320,0);
 				scene.add( topCol );
 
 				// La colonne
-                const column = new THREE.CylinderBufferGeometry(50,50,600,320);
+                const column = new THREE.CylinderBufferGeometry(50,70,600,320);
                 Col = new THREE.Mesh( column, columnG );
 				Col.position.set(-750,0,0);
 				scene.add( Col );
