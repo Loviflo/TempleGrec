@@ -38,12 +38,12 @@
 			let baseRadius = 75;
 			let topRadius = 50;
 			// Hauteur sous plafond
-			let ceilingHeight = 740;
+			let ceilingHeight = 590;
 			// Dimensions de la dalle et du toit
 			let widthG = 1700;
 			let heightG = 60;
 			let depthG = 3800;
-			let heightR = 100;
+			let heightR = 150;
 			// Delta
 			let deltaWidthP = 30;
 			let distCol = 300;
@@ -54,7 +54,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.set(850,800,1500);
+				camera.position.set(850,180,1500);
 
 				scene = new THREE.Scene();
 
@@ -329,6 +329,15 @@
 				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-10*distCol);
 				scene.add( Col );
 
+				//Colonne n°12
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-11*distCol);
+				scene.add( topCol );
+
+                Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-11*distCol);
+				scene.add( Col );
+
 
 				// Colonnes de droite
 
@@ -421,8 +430,16 @@
                 Col = new THREE.Mesh( column, columnG );
 				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-10*distCol);
 				scene.add( Col );
-				
-				
+
+				//Colonne n°11
+				topCol = new THREE.Mesh( top, columnG );
+                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-11*distCol);
+				scene.add( topCol );
+
+                Col = new THREE.Mesh( column, columnG );
+				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-11*distCol);
+				scene.add( Col );
+
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
