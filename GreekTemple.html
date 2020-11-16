@@ -42,7 +42,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.set(0,0,1800);
+				camera.position.set(0,0,1500);
 
 				scene = new THREE.Scene();
 
@@ -53,22 +53,22 @@
 				const ColumnGreek = new THREE.TextureLoader().load('../three.js-master/examples/textures/Greek/columnGreek3.jpg');
 				const columnG = new THREE.MeshBasicMaterial( { map: ColumnGreek } );
 
-				// Prisme à base triangulaire
-				// var shape = new THREE.Shape();
-				// shape.moveTo( 0,0 );
-				// shape.lineTo( 0, 2000 );
-				// shape.lineTo( 2000, 0 );
-				// shape.lineTo( 0, 0 );
+				//Prisme à base triangulaire
+				const shape = new THREE.Shape();
+				shape.moveTo( -850,440 );
+				shape.lineTo( 850, 440 );
+				shape.lineTo( 0, 700 );
 
-				// var extrudeSettings = {
-				// 	steps: 2,
-				// 	amount: 2,
-				// 	bevelEnabled: false,
-				// };			
+				const extrudeSettings = {
+					steps: 1,
+					depth: 2800,
+					bevelEnabled: false,
+				};			
  
-				// var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
-				// var prism = new THREE.Mesh(geometry, material); 
-				// scene.add(prism);	
+				var geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
+				var prism = new THREE.Mesh(geometry, material); 
+				prism.position.z = -2700;
+				scene.add(prism);	
 
 				// Premier sol
 				const ground1 = new THREE.BoxBufferGeometry(1700,60,2700);
