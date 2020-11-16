@@ -29,10 +29,14 @@
 			let secondGround;
 			let thirdGround;
 			let roofMesh;
+			let blockMesh;
 			// Dimensions cube colonnes
 			let widthCC = 200;
 			let heightCC = 40;
 			let depthCC = 200; 
+			// Dimensions colonne
+			let baseRadius = 75;
+			let topRadius = 50;
 			// Hauteur sous plafond
 			let ceilingHeight = 740;
 			// Dimensions de la dalle et du toit
@@ -74,7 +78,7 @@
 				};			
  
 				var geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-				var prism = new THREE.Mesh(geometry, material); 
+				var prism = new THREE.Mesh(geometry, columnG); 
 				prism.position.z = -depthG;
 				scene.add(prism);	
 
@@ -102,9 +106,15 @@
 				roofMesh.position.set(widthG/2,ceilingHeight + heightR/2,-(depthG/2));
 				scene.add(roofMesh);
 
+				// Salle...
+				const block = new THREE.BoxBufferGeometry(widthG-2*(distCol+baseRadius),ceilingHeight,depthG-2*(2*distCol-baseRadius));
+				blockMesh = new THREE.Mesh(block, columnG);
+				blockMesh.position.set(widthG/2,ceilingHeight/2,-(depthG/2));
+				scene.add(blockMesh);
+
 				// Modèle de la colonne
 				const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
-                const column = new THREE.CylinderBufferGeometry(50,75,ceilingHeight-heightCC,320);
+                const column = new THREE.CylinderBufferGeometry(topRadius,baseRadius,ceilingHeight-heightCC,320);
 
 
 				// Colonne de devant
