@@ -57,11 +57,11 @@
 
 				scene = new THREE.Scene();
 
-				const texture = new THREE.TextureLoader().load( '../three.js-master/examples/textures/black-marble.webp' );
+				const texture = new THREE.TextureLoader().load( 'Textures/black-marble.webp' );
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
-				const test = new THREE.TextureLoader().load('../three.js-master/examples/textures/floors/FloorsCheckerboard_S_Diffuse.jpg');
+				const test = new THREE.TextureLoader().load('Textures/FloorsCheckerboard_S_Diffuse.jpg');
 				const materialTest = new THREE.MeshBasicMaterial( { map: test } );
-				const ColumnGreek = new THREE.TextureLoader().load('../three.js-master/examples/textures/Greek/columnGreek3.jpg');
+				const ColumnGreek = new THREE.TextureLoader().load('Textures/columnGreek3.jpg');
 				const columnG = new THREE.MeshBasicMaterial( { map: ColumnGreek } );
 
 				//Prisme à base triangulaire
