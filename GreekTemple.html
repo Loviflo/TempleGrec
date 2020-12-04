@@ -30,6 +30,7 @@
 			let roofMesh;
 			let blockMesh;
 			let Ground;
+
 			// Dimensions cube colonnes
 			let widthCC = 200;
 			let heightCC = 40;
@@ -122,329 +123,43 @@
 				const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
                 const column = new THREE.CylinderBufferGeometry(topRadius,baseRadius,ceilingHeight-heightCC,320);
 
-
 				// Colonne de devant
 
-				// Colonne n°1
-				// Le haut de la colonne
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2));
-				scene.add( topCol );
-
-				// La colonne
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2));
-				scene.add( Col );
-				
-				// Colonne n°2
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 1*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 1*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
-				scene.add( Col );
-
-
-				// Colonne n°3
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 2*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 2*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
-				scene.add( Col );
-
-				// Colonne n°4
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 3*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 3*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
-				scene.add( Col );
-
-				// Colonne n°5
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 4*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 4*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
-				scene.add( Col );
-
-				// Colonne n°6
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 5*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 5*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
-				scene.add( Col );
-
-
-				// Colonnes arrières
-
-				// Colonne n°1
-				// Le haut de la colonne
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-				scene.add( topCol );
-
-				// La colonne
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-				scene.add( Col );
-				
-				// Colonne n°2
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 1*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 1*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-				scene.add( Col );
-
-
-				// Colonne n°3
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 2*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 2*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-				scene.add( Col );
-
-				// Colonne n°4
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 3*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 3*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-				scene.add( Col );
-
-				// Colonne n°5
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 4*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 4*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-				scene.add( Col );
-
-				// Colonne n°6
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2 + 5*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-				scene.add( topCol );
-
-				Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2 + 5*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-				scene.add( Col );
-
-
-				// Colonnes de gauche
-
-				//Colonne n°2
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-1*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-1*distCol);
-				scene.add( Col );
-
-				//Colonne n°3
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-2*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-2*distCol);
-				scene.add( Col );
-
-				//Colonne n°4
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-3*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-3*distCol);
-				scene.add( Col );
-
-				//Colonne n°5
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-4*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-4*distCol);
-				scene.add( Col );
-
-				//Colonne n°6
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-5*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-5*distCol);
-				scene.add( Col );
-
-				//Colonne n°7
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-6*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-6*distCol);
-				scene.add( Col );
-
-				//Colonne n°8
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-7*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-7*distCol);
-				scene.add( Col );
-
-				//Colonne n°9
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-8*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-8*distCol);
-				scene.add( Col );
-
-				//Colonne n°10
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-9*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-9*distCol);
-				scene.add( Col );
-
-				//Colonne n°11
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-10*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-10*distCol);
-				scene.add( Col );
-
-				//Colonne n°12
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-11*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-11*distCol);
-				scene.add( Col );
-
-
-				// Colonnes de droite
-
-				//Colonne n°2
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-1*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-1*distCol);
-				scene.add( Col );
-
-				//Colonne n°3
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-2*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-2*distCol);
-				scene.add( Col );
-
-				//Colonne n°4
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-3*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-3*distCol);
-				scene.add( Col );
-
-				//Colonne n°5
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-4*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-4*distCol);
-				scene.add( Col );
-
-				//Colonne n°6
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-5*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-5*distCol);
-				scene.add( Col );
-
-				//Colonne n°7
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-6*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-6*distCol);
-				scene.add( Col );
-
-				//Colonne n°8
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-7*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-7*distCol);
-				scene.add( Col );
-
-				//Colonne n°9
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-8*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-8*distCol);
-				scene.add( Col );
-
-				//Colonne n°10
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-9*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-9*distCol);
-				scene.add( Col );
-
-				//Colonne n°11
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-10*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-10*distCol);
-				scene.add( Col );
-
-				//Colonne n°11
-				topCol = new THREE.Mesh( top, columnG );
-                topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-11*distCol);
-				scene.add( topCol );
-
-                Col = new THREE.Mesh( column, columnG );
-				Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-11*distCol);
-				scene.add( Col );
+				for(let xCol = 0; xCol < 6; xCol++){
+					Col = new THREE.Mesh( column, columnG );
+					Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+					scene.add( Col );
+
+					topCol = new THREE.Mesh( top, columnG );
+                	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+					scene.add( topCol );
+
+					topCol = new THREE.Mesh( top, columnG );
+                	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
+					scene.add( topCol );
+
+					Col = new THREE.Mesh( column, columnG );
+					Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
+					scene.add( Col );
+				}
+
+				for(let zCol = 1; zCol < 12; zCol++){
+					topCol = new THREE.Mesh( top, columnG );
+					topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
+					scene.add( topCol );
+
+					Col = new THREE.Mesh( column, columnG );
+					Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-zCol*distCol);
+					scene.add( Col );
+					
+					topCol = new THREE.Mesh( top, columnG );
+					topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
+					scene.add( topCol );
+
+					Col = new THREE.Mesh( column, columnG );
+					Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-zCol*distCol);
+					scene.add( Col );
+				} 
 
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -469,7 +184,7 @@
 
 				requestAnimationFrame( animate );
 
-				//camera.position.z += -1;
+				// camera.position.z += -3;
 				//camera.position.x += 0.2;
 
 				renderer.render( scene, camera );
