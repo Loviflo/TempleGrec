@@ -4,7 +4,6 @@
 		<title>Greek Temple</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
 	</head>
 	<body>
 
@@ -54,7 +53,7 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.set(850,180,1500);
+				camera.position.set(850,400,1500);
 
 				scene = new THREE.Scene();
 
@@ -67,9 +66,9 @@
 
 				//Prisme à base triangulaire
 				const shape = new THREE.Shape();
-				shape.moveTo( -deltaWidthP,ceilingHeight+heightR);
-				shape.lineTo( widthG+2*deltaWidthP,ceilingHeight+heightR);
-				shape.lineTo( widthG/2, ceilingHeight+heightR + 250 );
+				shape.moveTo( -deltaWidthP,ceilingHeight+heightR); // Point de base
+				shape.lineTo( widthG+2*deltaWidthP,ceilingHeight+heightR); // Point de droite
+				shape.lineTo( widthG/2, ceilingHeight+heightR + 250 ); // Point du haut
 
 				const extrudeSettings = {
 					steps: 1,
