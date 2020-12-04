@@ -29,6 +29,7 @@
 			let thirdGround;
 			let roofMesh;
 			let blockMesh;
+			let Ground;
 			// Dimensions cube colonnes
 			let widthCC = 200;
 			let heightCC = 40;
@@ -63,6 +64,12 @@
 				const materialTest = new THREE.MeshBasicMaterial( { map: test } );
 				const ColumnGreek = new THREE.TextureLoader().load('Textures/columnGreek3.jpg');
 				const columnG = new THREE.MeshBasicMaterial( { map: ColumnGreek } );
+
+				//Sol
+				const ground = new THREE.BoxBufferGeometry(10000,heightG,10000);
+				Ground = new THREE.Mesh(ground, materialTest);
+				Ground.position.set(widthG/2,-210,-(depthG/2));
+				scene.add(Ground);
 
 				//Prisme à base triangulaire
 				const shape = new THREE.Shape();
