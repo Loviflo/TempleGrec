@@ -11,53 +11,44 @@
 
 			import * as THREE from '../three.js-master/build/three.module.js';
 			
-			let camera, scene, renderer;
-			let topCol;
-			let Col;
-			let topCol2;
-			let Col2;
-			let topCol3;
-			let Col3;
-			let topCol4;
-			let Col4;
-			let topCol5;
-			let Col5;
-			let topCol6;
-			let Col6;
-			let firstGround;
-			let secondGround;
-			let thirdGround;
-			let roofMesh;
-			let blockMesh;
-			let Ground;
+//---------------------------------------------------Variables---------------------------------------------------//
 
+			let camera, scene, renderer;
 			// Dimensions cube colonnes
 			let widthCC = 200;
 			let heightCC = 40;
 			let depthCC = 200; 
-			// Dimensions colonne
+			// Colonne
 			let baseRadius = 75;
 			let topRadius = 50;
+			let topCol, Col;
 			// Hauteur sous plafond
 			let ceilingHeight = 590;
-			// Dimensions de la dalle et du toit
+			// Dalle, sol et toit
 			let widthG = 1700;
 			let heightG = 60;
 			let depthG = 3800;
 			let heightR = 150;
+			let groundZ = -30;
+			let Ground, Floor, roofMesh, blockMesh;
 			// Delta
 			let deltaWidthP = 30;
 			let distCol = 300;
 
-			init();
-			animate();
+//---------------------------------------------------Fonctions---------------------------------------------------//
+
+//-------------------------------------------------Fonction init-------------------------------------------------//
 
 			function init() {
+
+//-----------------------------------------------------Caméra----------------------------------------------------//
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
 				camera.position.set(850,400,1500);
 
 				scene = new THREE.Scene();
+
+//----------------------------------------------------Textures---------------------------------------------------//
 
 				const texture = new THREE.TextureLoader().load( 'Textures/black-marble.webp' );
 				const material = new THREE.MeshBasicMaterial( { map: texture } );
@@ -66,11 +57,13 @@
 				const ColumnGreek = new THREE.TextureLoader().load('Textures/columnGreek3.jpg');
 				const columnG = new THREE.MeshBasicMaterial( { map: ColumnGreek } );
 
-				//Sol
-				const ground = new THREE.BoxBufferGeometry(10000,heightG,10000);
-				Ground = new THREE.Mesh(ground, materialTest);
-				Ground.position.set(widthG/2,-210,-(depthG/2));
-				scene.add(Ground);
+//---------------------------------------------Construction du temple--------------------------------------------//
+
+				// Sol
+				const floor = new THREE.BoxBufferGeometry(10000,heightG,10000);
+				Floor = new THREE.Mesh(floor, materialTest);
+				Floor.position.set(widthG/2,-210,-(depthG/2));
+				scene.add(Floor);
 
 				//Prisme à base triangulaire
 				const shape = new THREE.Shape();
@@ -89,23 +82,13 @@
 				prism.position.z = -depthG;
 				scene.add(prism);	
 
-				// Premier sol
-				const ground1 = new THREE.BoxBufferGeometry(widthG,heightG,depthG);
-				firstGround = new THREE.Mesh(ground1, columnG);
-				firstGround.position.set(widthG/2,-30,-(depthG/2));
-				scene.add(firstGround);
-
-				// Deuxième sol
-				const ground2 = new THREE.BoxBufferGeometry(widthG+50,heightG,depthG+50);
-				secondGround = new THREE.Mesh(ground2, columnG);
-				secondGround.position.set(widthG/2,-90,-(depthG/2));
-				scene.add(secondGround);
-
-				// Troisième sol
-				const ground3 = new THREE.BoxBufferGeometry(widthG+100,heightG,depthG+100);
-				thirdGround = new THREE.Mesh(ground3, columnG);
-				thirdGround.position.set(widthG/2,-150,-(depthG/2));
-				scene.add(thirdGround);
+				// Dalles
+				for(let zGround = 0; zGround < 3; zGround++){
+					const ground = new THREE.BoxBufferGeometry(widthG+50*zGround,heightG,depthG+50*zGround);
+					Ground = new THREE.Mesh(ground, columnG);
+					Ground.position.set(widthG/2,-30 + zGround*-heightG,-(depthG/2));
+					scene.add(Ground);
+				}
 
 				// Toit
 				const roof = new THREE.BoxBufferGeometry(widthG,heightR,depthG);
@@ -119,12 +102,13 @@
 				blockMesh.position.set(widthG/2,ceilingHeight/2,-(depthG/2));
 				scene.add(blockMesh);
 
+				// Colonnes //
+
 				// Modèle de la colonne
 				const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
                 const column = new THREE.CylinderBufferGeometry(topRadius,baseRadius,ceilingHeight-heightCC,320);
 
-				// Colonne de devant
-
+				// Colonnes de devant et colonnes arrières
 				for(let xCol = 0; xCol < 6; xCol++){
 					Col = new THREE.Mesh( column, columnG );
 					Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
@@ -143,6 +127,7 @@
 					scene.add( Col );
 				}
 
+				// Colonnes de gauche et de droite
 				for(let zCol = 1; zCol < 12; zCol++){
 					topCol = new THREE.Mesh( top, columnG );
 					topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
@@ -171,6 +156,8 @@
 
 			}
 
+//--------------------------------------------Fonction onWindowsResize-------------------------------------------//
+
 			function onWindowResize() {
 
 				camera.aspect = window.innerWidth / window.innerHeight;
@@ -179,6 +166,8 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
+
+//------------------------------------------------Fonction animate-----------------------------------------------//
 
 			function animate() {
 
@@ -191,6 +180,10 @@
 
 			}
 
+//----------------------------------------------Appel des fonctions----------------------------------------------//
+
+			init();
+			animate();
 
 		</script>
 
