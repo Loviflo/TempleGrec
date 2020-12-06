@@ -10,11 +10,19 @@
 		<script type="module">
 
 			import * as THREE from '../three.js-master/build/three.module.js';
+									
+			import Stats from '../three.js-master/examples/jsm/libs/stats.module.js';
+
+			import { GUI } from '../three.js-master/examples/jsm/libs/dat.gui.module.js';
+
+			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
 			
 //---------------------------------------------------Variables---------------------------------------------------//
 
 			let camera, scene, renderer;
 			let spotLight, lightHelper, shadowCameraHelper;
+			let gui;
+			let container, stats;
 			// Dimensions cube colonnes
 			let widthCC = 200;
 			let heightCC = 40;
@@ -41,6 +49,13 @@
 //-------------------------------------------------Fonction init-------------------------------------------------//
 
 			function init() {
+
+//--------------------------------------------Moniteur de performance--------------------------------------------//
+
+				stats = new Stats();
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				container.appendChild( stats.dom );
 
 //-----------------------------------------------------Caméra----------------------------------------------------//
 
@@ -217,7 +232,7 @@
 				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 				renderer.outputEncoding = THREE.sRGBEncoding;
 				window.addEventListener( 'resize', onWindowResize, false );
-
+				container.appendChild( renderer.domElement );
 			}
 
 //--------------------------------------------Fonction onWindowsResize-------------------------------------------//
@@ -240,8 +255,41 @@
 				// camera.position.z += -3;
 				// camera.position.y -= 1;
 				// camera.position.x += 2;
+				stats.update();
+				render();
+
+			}
+			
+			function render() {
 
 				renderer.render( scene, camera );
+
+			}
+
+			function buildGui() {
+
+				gui = new GUI();
+
+				const params = {
+					'Hauteur sous plafond' : ceilingHeight,
+					'intensity': spotLight.intensity
+				};
+
+				gui.add( params, 'Hauteur sous plafond', 200, 1000,50).onChange( function ( val ) {
+
+					ceilingHeight = val;
+					render();
+
+				} );
+
+				gui.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
+
+					spotLight.intensity = val;
+					render();
+
+				} );
+
+				gui.open();
 
 			}
 
@@ -249,6 +297,8 @@
 
 			init();
 			animate();
+			buildGui();
+			render();
 
 		</script>
 
