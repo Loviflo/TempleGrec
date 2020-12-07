@@ -60,10 +60,8 @@
 //-----------------------------------------------------Caméra----------------------------------------------------//
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 20000 );
-				camera.position.set(850,600,1500);
+				camera.position.set(850,500,1500);
 				// camera.lookAt(850,0,0);
-
-				scene = new THREE.Scene();
 				//camera.lookAt( scene.position );
 
 
@@ -81,19 +79,25 @@
 				stones.wrapT = THREE.RepeatWrapping;
 				stones.repeat.set(80, 80 );
 				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
+				const background = loader.load('Textures/background1.jpg');
+
+//-----------------------------------------------------Scene-----------------------------------------------------//
+
+				scene = new THREE.Scene();
+				scene.background = background;
 
 //-----------------------------------------------Lumières et ombres----------------------------------------------//
 
 				const ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
 				scene.add( ambient );
 
-				spotLight = new THREE.SpotLight( 0xe3a988, 1);
+				spotLight = new THREE.SpotLight( 0xa55527, 1);
 				spotLight.position.set( -300, 1000, 2000 );
-				spotLight.target.position.set(850,300,0);
+				spotLight.target.position.set(500,500,0);
 				spotLight.angle = 90;
 				spotLight.penumbra = 0.1;
 				spotLight.decay = 2;
-				spotLight.distance = 10000;
+				spotLight.distance = 20000;
 				spotLight.castShadow = true;
 				spotLight.shadow.mapSize.width = 8192;
 				spotLight.shadow.mapSize.height = 8192;
@@ -252,7 +256,7 @@
 
 				requestAnimationFrame( animate );
 
-				// camera.position.z += -3;
+				// camera.position.z += -1;
 				// camera.position.y -= 1;
 				// camera.position.x += 2;
 				stats.update();
@@ -260,11 +264,13 @@
 
 			}
 			
+//-----------------------------------------------Fonction de rendu-----------------------------------------------//
+
 			function render() {
-
 				renderer.render( scene, camera );
-
 			}
+
+//--------------------------------------------------Fonction GUI-------------------------------------------------//
 
 			function buildGui() {
 
@@ -275,20 +281,24 @@
 					'intensity': spotLight.intensity
 				};
 
+				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
+
+
 				gui.add( params, 'Hauteur sous plafond', 200, 1000,50).onChange( function ( val ) {
 
 					ceilingHeight = val;
+					console.log(ceilingHeight);
 					render();
 
 				} );
 
-				gui.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
+				lightFolder.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
 
 					spotLight.intensity = val;
 					render();
 
 				} );
-
+				lightFolder.open();
 				gui.open();
 
 			}
