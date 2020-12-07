@@ -23,6 +23,8 @@
 			let spotLight, lightHelper, shadowCameraHelper;
 			let gui;
 			let container, stats;
+			let Temple = new THREE.Group();
+
 			// Dimensions cube colonnes
 			let widthCC = 200;
 			let heightCC = 40;
@@ -79,7 +81,10 @@
 				stones.wrapT = THREE.RepeatWrapping;
 				stones.repeat.set(80, 80 );
 				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
-				const background = loader.load('Textures/background1.jpg');
+				const background = loader.load('Textures/background5.jpg');
+				background.wrapS = THREE.RepeatWrapping;
+				background.wrapT = THREE.RepeatWrapping;
+				background.repeat.set(1, 1 );
 
 //-----------------------------------------------------Scene-----------------------------------------------------//
 
@@ -91,8 +96,8 @@
 				const ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
 				scene.add( ambient );
 
-				spotLight = new THREE.SpotLight( 0xa55527, 1);
-				spotLight.position.set( -300, 1000, 2000 );
+				spotLight = new THREE.SpotLight( 0xffffff, 1);
+				spotLight.position.set(  -300, 1000, 2000 );
 				spotLight.target.position.set(500,500,0);
 				spotLight.angle = 90;
 				spotLight.penumbra = 0.1;
@@ -225,7 +230,7 @@
 					scene.add( Col );
 				} 
 
-
+				// Temple.add(allObjects);
 //-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -237,6 +242,7 @@
 				renderer.outputEncoding = THREE.sRGBEncoding;
 				window.addEventListener( 'resize', onWindowResize, false );
 				container.appendChild( renderer.domElement );
+
 			}
 
 //--------------------------------------------Fonction onWindowsResize-------------------------------------------//
@@ -284,10 +290,11 @@
 				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
 
 
-				gui.add( params, 'Hauteur sous plafond', 200, 1000,50).onChange( function ( val ) {
+				gui.add( params, 'Hauteur sous plafond', 1, 5,0.1).onChange( function ( val ) {
 
-					ceilingHeight = val;
+					// ceilingHeight = val;
 					console.log(ceilingHeight);
+					// Temple.scale.x = val;
 					render();
 
 				} );
