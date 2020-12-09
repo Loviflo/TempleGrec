@@ -23,6 +23,7 @@
 			let spotLight, lightHelper, shadowCameraHelper;
 			let gui;
 			let container, stats;
+			let targetLight;
 			let Temple = new THREE.Group();
 
 			// Dimensions cube colonnes
@@ -45,14 +46,15 @@
 			// Delta
 			let deltaWidthP = 30;
 			let distCol = 300;
-
+			let Surprise;
 //---------------------------------------------------Fonctions---------------------------------------------------//
 
 //-------------------------------------------------Fonction init-------------------------------------------------//
 
 			function init() {
 
-//--------------------------------------------Moniteur de performance--------------------------------------------//
+				// Temple.add(Col);
+				// Temple.add(roofMesh);//--------------------------------------------Moniteur de performance--------------------------------------------//
 
 				stats = new Stats();
 				container = document.createElement( 'div' );
@@ -111,9 +113,25 @@
 				spotLight.shadow.focus = 1;
 				scene.add( spotLight );
 				scene.add( spotLight.target );
+				targetLight = new THREE.SpotLight( 0xff0000, 1);
+				targetLight.position.set(  850, 1000, 2000 );
+				targetLight.target.position.set(500,500,0);
+				targetLight.angle = 10;
+				targetLight.penumbra = 0.1;
+				targetLight.decay = 2;
+				targetLight.distance = 20000;
+				targetLight.castShadow = true;
+				targetLight.shadow.mapSize.width = 8192;
+				targetLight.shadow.mapSize.height = 8192;
+				targetLight.shadow.camera.near = 10;
+				targetLight.shadow.camera.far = 20000;
+				targetLight.shadow.focus = 1;
+				scene.add( targetLight );
+				scene.add( targetLight.target );
 
-				// shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
-				// scene.add( shadowCameraHelper );
+				shadowCameraHelper = new THREE.CameraHelper( targetLight.shadow.camera );
+				scene.add( shadowCameraHelper );
+
 
 //---------------------------------------------Construction du temple--------------------------------------------//
 
@@ -231,7 +249,13 @@
 				} 
 
 				// Temple.add(allObjects);
-//-----------------------------------------------------Rendu-----------------------------------------------------//
+				const surprise = new THREE.BoxBufferGeometry(50,50,50);
+				Surprise = new THREE.Mesh(surprise, columnG);
+				Surprise.position.set(-300,200,0);
+				Surprise.receiveShadow = true;
+				Surprise.castShadow = true;
+				scene.add(Surprise);
+				//-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -265,6 +289,8 @@
 				// camera.position.z += -1;
 				// camera.position.y -= 1;
 				// camera.position.x += 2;
+				Surprise.position.x += 1;
+				targetLight.target = Surprise;
 				stats.update();
 				render();
 
