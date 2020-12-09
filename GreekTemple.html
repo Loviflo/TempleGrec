@@ -20,7 +20,7 @@
 //---------------------------------------------------Variables---------------------------------------------------//
 
 			let camera, scene, renderer;
-			let spotLight, lightHelper, shadowCameraHelper;
+			let spotLight, lightHelper, shadowCameraHelper, light, ambient;
 			let gui;
 			let container, stats;
 			let Temple = new THREE.Group();
@@ -46,6 +46,7 @@
 			let deltaWidthP = 30;
 			let distCol = 300;
 			let Surprise;
+			let zSurprise = 0;
 //---------------------------------------------------Fonctions---------------------------------------------------//
 
 //-------------------------------------------------Fonction init-------------------------------------------------//
@@ -81,7 +82,7 @@
 				const stones = loader.load('Textures/stones2.jpg');
 				stones.wrapS = THREE.RepeatWrapping;
 				stones.wrapT = THREE.RepeatWrapping;
-				stones.repeat.set(80, 80 );
+				stones.repeat.set(800, 800 );
 				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
 				const background = loader.load('Textures/background5.jpg');
 				background.wrapS = THREE.RepeatWrapping;
@@ -95,11 +96,11 @@
 
 //-----------------------------------------------Lumières et ombres----------------------------------------------//
 
-				const ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
+				ambient = new THREE.AmbientLight( 0xffffff, 0.05 );
 				scene.add( ambient );
 
 				spotLight = new THREE.SpotLight( 0xffffff, 1);
-				spotLight.position.set(  -8000, 3000, 10000 );
+				spotLight.position.set(-8000, 4000, 10000 );
 				spotLight.target.position.set(500,300,0);
 				spotLight.angle = 90;
 				spotLight.penumbra = 0.1;
@@ -114,6 +115,10 @@
 				scene.add( spotLight );
 				scene.add( spotLight.target );
 
+				light = new THREE.PointLight( 0xff0000, 3, 500 );
+				light.position.set( 250, 200, 0 );
+				scene.add( light );
+
 				shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
 				scene.add( shadowCameraHelper );
 
@@ -121,7 +126,7 @@
 //---------------------------------------------Construction du temple--------------------------------------------//
 
 				// Sol
-				const floor = new THREE.BoxBufferGeometry(20000,heightG,20000);
+				const floor = new THREE.BoxBufferGeometry(200000,heightG,200000);
 				Floor = new THREE.Mesh(floor, stonesG);
 				Floor.position.set(widthG/2,-210,-(depthG/2));
 				Floor.receiveShadow = true;
@@ -236,7 +241,8 @@
 				// Temple.add(allObjects);
 				const surprise = new THREE.BoxBufferGeometry(50,50,50);
 				Surprise = new THREE.Mesh(surprise, columnG);
-				Surprise.position.set(-300,200,0);
+				Surprise.position.set(250,200,0);
+				Surprise.reflectivity = 1;
 				Surprise.receiveShadow = true;
 				Surprise.castShadow = true;
 				scene.add(Surprise);
@@ -274,7 +280,15 @@
 				// camera.position.z += -1;
 				// camera.position.y -= 1;
 				// camera.position.x += 2;
-				Surprise.position.x += 1;
+				// spotLight.position.x += 2;
+				// //spotLight.position.y += 2;
+				// spotLight.position.z += -2;
+				
+				Surprise.position.z += -zSurprise;
+				light.position.z += -zSurprise;
+				if(Surprise.position.z < -2000 || Surprise.position.z > 0){
+					zSurprise = -zSurprise;
+				}
 				stats.update();
 				render();
 
@@ -293,25 +307,32 @@
 				gui = new GUI();
 
 				const params = {
-					'Hauteur sous plafond' : ceilingHeight,
+					'Lumière position x' : spotLight.position.x,
+					'Lumière position z' : spotLight.position.z,
 					'intensity': spotLight.intensity
 				};
 
 				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
 
 
-				gui.add( params, 'Hauteur sous plafond', 1, 5,0.1).onChange( function ( val ) {
+				gui.add( params, 'Lumière position x', -10000, 10000,100).onChange( function ( val ) {
+					spotLight.position.x = val;
+					spotLight.position.y = Math.sqrt(Math.pow(10000,2)-Math.pow(val,2)); // x² + y² = d² donc y² = d² - x² donc y = 
+					spotLight.position.z = -val; // Pour course du soleil en diagonal
+					if(val == 0){
+						ambient.intensity = 0.2;
+						ambient.color = 0xff0000;
+					}
 
-					// ceilingHeight = val;
-					console.log(ceilingHeight);
-					// Temple.scale.x = val;
 					render();
 
 				} );
 
+
 				lightFolder.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
 
 					spotLight.intensity = val;
+					zSurprise = 1;
 					render();
 
 				} );
