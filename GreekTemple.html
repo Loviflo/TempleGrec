@@ -74,12 +74,22 @@
 				const material = new THREE.MeshPhongMaterial( { map: texture, dithering: true } );
 				const test = loader.load('Textures/FloorsCheckerboard_S_Diffuse.jpg');
 				const materialTest = new THREE.MeshBasicMaterial( { map: test, dithering: true } );
-				const ColumnGreek = loader.load('Textures/columnGreek3.jpg');
+				const marble = loader.load('Textures/whitemarble.jpg');
+				const marbleW = new THREE.MeshPhongMaterial( {map : marble, dithering: true } );
+				const orange = loader.load('Textures/orange.jpg');
+				const orangeg = new THREE.MeshPhongMaterial( {map : orange, dithering: true } );
+				const ColumnGreek = loader.load('Textures/marblewhite.jpg');
 				const columnG = new THREE.MeshPhongMaterial( {map : ColumnGreek, dithering: true } );
 				const stones = loader.load('Textures/stones2.jpg');
 				stones.wrapS = THREE.RepeatWrapping;
 				stones.wrapT = THREE.RepeatWrapping;
 				stones.repeat.set(80, 80 );
+				marble.wrapS = THREE.RepeatWrapping;
+				marble.wrapT = THREE.RepeatWrapping;
+				marble.repeat.set(5, 1 );
+				orange.wrapS = THREE.RepeatWrapping;
+				orange.wrapT = THREE.RepeatWrapping;
+				orange.repeat.set(2, 2 );
 				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
 				const background = loader.load('Textures/background5.jpg');
 				background.wrapS = THREE.RepeatWrapping;
@@ -137,7 +147,7 @@
 				};			
  
 				let geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-				let prism = new THREE.Mesh(geometry, columnG);
+				let prism = new THREE.Mesh(geometry, marbleW);
 				prism.receiveShadow = true;
 				prism.castShadow = true; 
 				prism.position.z = -depthG;
@@ -147,7 +157,7 @@
 				// Dalles
 				for(let zGround = 0; zGround < 3; zGround++){
 					const ground = new THREE.BoxBufferGeometry(widthG+50*zGround,heightG,depthG+50*zGround);
-					Ground = new THREE.Mesh(ground, columnG);
+					Ground = new THREE.Mesh(ground, orangeg);
 					Ground.position.set(widthG/2,-30 + zGround*-heightG,-(depthG/2));
 					Ground.receiveShadow = true;
 					Ground.castShadow = true;
@@ -156,7 +166,7 @@
 
 				// Toit
 				const roof = new THREE.BoxBufferGeometry(widthG,heightR,depthG);
-				roofMesh = new THREE.Mesh(roof, columnG);
+				roofMesh = new THREE.Mesh(roof, marbleW);
 				roofMesh.position.set(widthG/2,ceilingHeight + heightR/2,-(depthG/2));
 				roofMesh.receiveShadow = true;
 				roofMesh.castShadow = true;
@@ -164,7 +174,7 @@
 
 				// Salle...
 				const block = new THREE.BoxBufferGeometry(widthG-2*(distCol+baseRadius),ceilingHeight,depthG-2*(2*distCol-baseRadius));
-				blockMesh = new THREE.Mesh(block, columnG);
+				blockMesh = new THREE.Mesh(block, marbleW);
 				blockMesh.position.set(widthG/2,ceilingHeight/2,-(depthG/2));
 				blockMesh.receiveShadow = true;
 				blockMesh.castShadow = true;
@@ -184,13 +194,13 @@
 					Col.castShadow = true;
 					scene.add( Col );
 
-					topCol = new THREE.Mesh( top, columnG );
+					topCol = new THREE.Mesh( top, orangeg );
                 	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
 					topCol.receiveShadow = true;
 					topCol.castShadow = true;
 					scene.add( topCol );
 					
-					topCol = new THREE.Mesh( top, columnG );
+					topCol = new THREE.Mesh( top, orangeg );
                 	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
 					topCol.receiveShadow = true;
 					topCol.castShadow = true;
@@ -205,7 +215,7 @@
 
 				// Colonnes de gauche et de droite
 				for(let zCol = 1; zCol < 12; zCol++){
-					topCol = new THREE.Mesh( top, columnG );
+					topCol = new THREE.Mesh( top, orangeg );
 					topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
 					topCol.receiveShadow = true;
 					topCol.castShadow = true;
@@ -217,7 +227,7 @@
 					Col.castShadow = true;
 					scene.add( Col );
 					
-					topCol = new THREE.Mesh( top, columnG );
+					topCol = new THREE.Mesh( top, orangeg );
 					topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
 					topCol.receiveShadow = true;
 					topCol.castShadow = true;
