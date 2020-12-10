@@ -6,7 +6,6 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	</head>
 	<body>
-
 		<script type="module">
 
 			import * as THREE from '../three.js-master/build/three.module.js';
@@ -49,6 +48,7 @@
 			let Surprise;
 			let zSurprise = 0;
 			let zCamera = 0;
+
 //---------------------------------------------------Fonctions---------------------------------------------------//
 
 //-------------------------------------------------Fonction init-------------------------------------------------//
@@ -122,8 +122,8 @@
 				light.position.set( 250, 250, -250 );
 				scene.add( light );
 
-				shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
-				scene.add( shadowCameraHelper );
+				// shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
+				// scene.add( shadowCameraHelper );
 
 
 //---------------------------------------------Construction du temple--------------------------------------------//
@@ -242,7 +242,7 @@
 				} 
 
 				// Temple.add(allObjects);
-				const surprise = new THREE.BoxBufferGeometry(50,50,50);
+				const surprise = new THREE.SphereGeometry( 25, 32, 32 );
 				Surprise = new THREE.Mesh(surprise, magicalMaterial);
 				Surprise.position.set(250,250,-250);
 				Surprise.reflectivity = 1;
@@ -271,7 +271,6 @@
 
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
-
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
@@ -292,7 +291,7 @@
 				Surprise.position.z += -zSurprise;
 				camera.position.z += -zCamera;
 				light.position.z += -zSurprise;
-				if(Surprise.position.z < -2000 || Surprise.position.z > 0){
+				if(Surprise.position.z < -3550 || Surprise.position.z > -250){
 					zSurprise = -zSurprise;
 					zCamera = - zCamera;
 				}
@@ -315,16 +314,19 @@
 				gui = new GUI();
 
 				const params = {
-					'Lumière position x' : spotLight.position.x,
-					'Lumière position z' : spotLight.position.z,
-					'intensity' : spotLight.intensity,
+					'Soleil' : spotLight.position.x,
+					'Intensité' : spotLight.intensity,
 					'Objet magique' : false
 				};
 
 				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
 
+				lightFolder.add( params, 'Intensité', 0, 10, 0.5 ).onChange( function ( val ) {
+				spotLight.intensity = val;
+				render();
+				} );	
 
-				gui.add( params, 'Lumière position x', -10000, 10000,100).onChange( function ( val ) {
+				lightFolder.add( params, 'Soleil', -10000, 10000,100).onChange( function ( val ) {
 					spotLight.position.x = val;
 					spotLight.position.y = Math.sqrt(Math.pow(10000,2)-Math.pow(val,2)); // x² + y² = d² donc y² = d² - x² donc y = √(d² - x²)
 					spotLight.position.z = -val; // Pour course du soleil en diagonal
@@ -359,13 +361,7 @@
 				});
 
 
-				lightFolder.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
 
-					spotLight.intensity = val;
-
-					render();
-
-				} );
 				lightFolder.open();
 				gui.open();
 
