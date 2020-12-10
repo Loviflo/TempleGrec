@@ -17,6 +17,7 @@
 
 			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
 			
+			import { Reflector } from '../three.js-master/examples/jsm/objects/Reflector.js';
 //---------------------------------------------------Variables---------------------------------------------------//
 
 			let camera, scene, renderer;
@@ -47,6 +48,7 @@
 			let distCol = 300;
 			let Surprise;
 			let zSurprise = 0;
+			let zCamera = 0;
 //---------------------------------------------------Fonctions---------------------------------------------------//
 
 //-------------------------------------------------Fonction init-------------------------------------------------//
@@ -55,7 +57,7 @@
 
 				// Temple.add(Col);
 				// Temple.add(roofMesh);
-
+				
 //--------------------------------------------Moniteur de performance--------------------------------------------//
 
 				stats = new Stats();
@@ -71,7 +73,7 @@
 				//camera.lookAt( scene.position );
 
 //----------------------------------------------------Textures---------------------------------------------------//
-
+				
 				const loader = new THREE.TextureLoader();
 				const texture = loader.load( 'Textures/black-marble.webp' );
 				const material = new THREE.MeshPhongMaterial( { map: texture, dithering: true } );
@@ -85,9 +87,10 @@
 				stones.repeat.set(800, 800 );
 				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
 				const background = loader.load('Textures/background5.jpg');
-				background.wrapS = THREE.RepeatWrapping;
-				background.wrapT = THREE.RepeatWrapping;
-				background.repeat.set(1, 1 );
+				const magicalMaterial = new THREE.MeshPhongMaterial( {
+					map: stones,
+					color: 0xff0000,
+				} );
 
 //-----------------------------------------------------Scene-----------------------------------------------------//
 
@@ -101,7 +104,7 @@
 
 				spotLight = new THREE.SpotLight( 0xffffff, 1);
 				spotLight.position.set(-8000, 4000, 10000 );
-				spotLight.target.position.set(500,300,0);
+				spotLight.target.position.set(850,300,-1900);
 				spotLight.angle = 90;
 				spotLight.penumbra = 0.1;
 				spotLight.decay = 2;
@@ -240,12 +243,13 @@
 
 				// Temple.add(allObjects);
 				const surprise = new THREE.BoxBufferGeometry(50,50,50);
-				Surprise = new THREE.Mesh(surprise, columnG);
+				Surprise = new THREE.Mesh(surprise, magicalMaterial);
 				Surprise.position.set(250,200,0);
 				Surprise.reflectivity = 1;
 				Surprise.receiveShadow = true;
 				Surprise.castShadow = true;
 				scene.add(Surprise);
+
 				//-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -285,10 +289,13 @@
 				// spotLight.position.z += -2;
 				
 				Surprise.position.z += -zSurprise;
+				camera.position.z += -zCamera;
 				light.position.z += -zSurprise;
 				if(Surprise.position.z < -2000 || Surprise.position.z > 0){
 					zSurprise = -zSurprise;
+					zCamera = - zCamera;
 				}
+
 				stats.update();
 				render();
 
@@ -309,7 +316,8 @@
 				const params = {
 					'Lumière position x' : spotLight.position.x,
 					'Lumière position z' : spotLight.position.z,
-					'intensity': spotLight.intensity
+					'intensity' : spotLight.intensity,
+					'Objet magique' : false
 				};
 
 				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
@@ -317,22 +325,30 @@
 
 				gui.add( params, 'Lumière position x', -10000, 10000,100).onChange( function ( val ) {
 					spotLight.position.x = val;
-					spotLight.position.y = Math.sqrt(Math.pow(10000,2)-Math.pow(val,2)); // x² + y² = d² donc y² = d² - x² donc y = 
+					spotLight.position.y = Math.sqrt(Math.pow(10000,2)-Math.pow(val,2)); // x² + y² = d² donc y² = d² - x² donc y = √(d² - x²)
 					spotLight.position.z = -val; // Pour course du soleil en diagonal
 					if(val == 0){
 						ambient.intensity = 0.2;
 						ambient.color = 0xff0000;
 					}
-
 					render();
-
 				} );
+
+				gui.add(params, 'Objet magique').onChange( function ( bin ){
+					camera.position.set(-100,250,0);
+					camera.lookAt(Surprise.position);
+					zSurprise = 1;
+					zCamera = 1;
+					spotLight.intensity = 0;
+					console.log(bin);
+					render();
+				});
 
 
 				lightFolder.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
 
 					spotLight.intensity = val;
-					zSurprise = 1;
+
 					render();
 
 				} );
