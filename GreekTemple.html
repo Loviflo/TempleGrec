@@ -340,10 +340,6 @@
 					spotLight.position.x = val;
 					spotLight.position.y = Math.sqrt(Math.pow(10000,2)-Math.pow(val,2)); // x² + y² = d² donc y² = d² - x² donc y = √(d² - x²)
 					spotLight.position.z = -val; // Pour course du soleil en diagonal
-					if(val == 0){
-						ambient.intensity = 0.2;
-						ambient.color = 0xff0000;
-					}
 					render();
 				} );
 
