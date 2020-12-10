@@ -16,47 +16,42 @@
 
 			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
 			
-			import { Reflector } from '../three.js-master/examples/jsm/objects/Reflector.js';
 //---------------------------------------------------Variables---------------------------------------------------//
 
-			let camera, scene, renderer;
-			let spotLight, lightHelper, shadowCameraHelper, light, ambient;
-			let gui;
-			let container, stats;
-			let Temple = new THREE.Group();
-
-			// Dimensions cube colonnes
-			let widthCC = 200;
-			let heightCC = 40;
-			let depthCC = 200; 
+			let camera, shadowCameraHelper;  // Caméra
+			let spotLight, lightHelper, light, ambient; // Lumières
+			let scene, renderer; // Scène et rendu
+			let gui; // Interface graphique
+			let container, stats; // Moniteur de performance
 			// Colonne
-			let baseRadius = 75;
-			let topRadius = 50;
-			let topCol, Col;
+			let baseRadius = 75; // Rayon de la base
+			let topRadius = 50; // Rayon du sommet
+			let topCol, Col; // Colonne et cube
+			// Dimensions cube colonnes
+			let widthCC = 200; // Largeur du cube
+			let heightCC = 40; // Hauteur du cube
+			let depthCC = 200; // Profondeur du cube
 			// Hauteur sous plafond
 			let ceilingHeight = 590;
-			// Dalle, sol et toit
-			let widthG = 1700;
-			let heightG = 60;
-			let depthG = 3800;
-			let heightR = 150;
-			let groundZ = -30;
-			let Ground, Floor, roofMesh, blockMesh;
+			// Dalle, sol, toit et salle
+			let widthG = 1700; // Largeur 
+			let heightG = 60; // Hauteur
+			let depthG = 3800; // Profondeur
+			let heightR = 150; // Hauteur
+			let groundZ = -30; // Position profondeur
+			let Ground, Floor, roofMesh, blockMesh; // Dalle, sol, toit et salle
 			// Delta
 			let deltaWidthP = 30;
 			let distCol = 300;
-			let Surprise;
-			let zSurprise = 0;
-			let zCamera = 0;
+			let Surprise; // Objet magique
+			let zSurprise = 0; // Déplacement de l'objet magique et de la lumière en profondeur. Initialiser à 0
+			let zCamera = 0; // Déplacement de la caméra en profondeur. Initialiser à 0
 
 //---------------------------------------------------Fonctions---------------------------------------------------//
 
 //-------------------------------------------------Fonction init-------------------------------------------------//
 
 			function init() {
-
-				// Temple.add(Col);
-				// Temple.add(roofMesh);
 				
 //--------------------------------------------Moniteur de performance--------------------------------------------//
 
@@ -68,69 +63,67 @@
 //-----------------------------------------------------Caméra----------------------------------------------------//
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 30000 );
-				camera.position.set(850,500,1500);
-				camera.lookAt(850,500,0);
+				camera.position.set(850,500,1500); // Position de la caméra
 
 //----------------------------------------------------Textures---------------------------------------------------//
 				
 				const loader = new THREE.TextureLoader();
-				const texture = loader.load( 'Textures/black-marble.webp' );
-				const material = new THREE.MeshPhongMaterial( { map: texture, dithering: true } );
-				const test = loader.load('Textures/FloorsCheckerboard_S_Diffuse.jpg');
-				const materialTest = new THREE.MeshBasicMaterial( { map: test, dithering: true } );
-				const marble = loader.load('Textures/whitemarble.jpg');
-				const marbleW = new THREE.MeshPhongMaterial( {map : marble, dithering: true } );
-				const orange = loader.load('Textures/orange.jpg');
-				const orangeg = new THREE.MeshPhongMaterial( {map : orange, dithering: true } );
-				const ColumnGreek = loader.load('Textures/marblewhite.jpg');
-				const columnG = new THREE.MeshPhongMaterial( {map : ColumnGreek, dithering: true } );
-				const stones = loader.load('Textures/stones2.jpg');
-				stones.wrapS = THREE.RepeatWrapping;
-				stones.wrapT = THREE.RepeatWrapping;
-				stones.repeat.set(80, 80 );
-				marble.wrapS = THREE.RepeatWrapping;
-				marble.wrapT = THREE.RepeatWrapping;
-				marble.repeat.set(5, 1 );
-				orange.wrapS = THREE.RepeatWrapping;
-				orange.wrapT = THREE.RepeatWrapping;
-				orange.repeat.set(2, 2 );
-				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
-				const background = loader.load('Textures/background5.jpg');
-				const magicalMaterial = new THREE.MeshPhongMaterial( {
-					map: stones,
-					color: 0xff0000,
-				} );
+
+				const test = loader.load('Textures/FloorsCheckerboard_S_Diffuse.jpg'); // Texture de test
+				const materialTest = new THREE.MeshBasicMaterial( { map: test, dithering: true } ); // Mappage de la texture
+				// const marble = loader.load('Textures/whitemarble.jpg');
+				// const marbleW = new THREE.MeshPhongMaterial( {map : marble, dithering: true } );
+				const orange = loader.load('Textures/orange.jpg'); // Texture des dalles et des cubes des colonnes
+				const orangeg = new THREE.MeshPhongMaterial( {map : orange, dithering: true } ); // Mappage de la texture
+				const ColumnGreek = loader.load('Textures/marblewhite.jpg'); // Texture des colonnes, de la salle et du prisme
+				const columnG = new THREE.MeshPhongMaterial( {map : ColumnGreek, dithering: true } ); // Mappage de la texture
+				const stones = loader.load('Textures/stones2.jpg'); // Texture du sol
+				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } ); // Mappage de la texture
+				const background = loader.load('Textures/background5.jpg'); // Texture de l'arrière-plan
+				const magicalMaterial = new THREE.MeshPhongMaterial( {color: 0xff0000} );
+				// Répétition des textures
+				stones.wrapS = THREE.RepeatWrapping; // Répétition horizontale
+				stones.wrapT = THREE.RepeatWrapping; // Répétition verticale
+				stones.repeat.set(80, 80 ); // Nombre de répétition
+				// marble.wrapS = THREE.RepeatWrapping;
+				// marble.wrapT = THREE.RepeatWrapping;
+				// marble.repeat.set(5, 1 );
+				orange.wrapS = THREE.RepeatWrapping; // Répétition verticale
+				orange.wrapT = THREE.RepeatWrapping; // Répétition verticale
+				orange.repeat.set(2, 2 ); // Nombre de répétition
 
 //-----------------------------------------------------Scene-----------------------------------------------------//
 
 				scene = new THREE.Scene();
-				scene.background = background;
+				scene.background = background; // Ajout de la texture à l'arrière-plan de la scène
 
 //-----------------------------------------------Lumières et ombres----------------------------------------------//
 
-				ambient = new THREE.AmbientLight( 0xffffff, 0.05 );
+				// Lumière ambiante
+				ambient = new THREE.AmbientLight( 0xffffff, 0.05 ); // Couleur blanche et intensité à 0.05
 				scene.add( ambient );
 
-				spotLight = new THREE.SpotLight( 0xffffff, 1);
-				spotLight.position.set(-8000, 4000, 10000 );
-				spotLight.target.position.set(850,300,-1900);
-				spotLight.angle = 90;
+				// Projecteur(Soleil)
+				spotLight = new THREE.SpotLight( 0xffffff, 1); // Couleur blanche et intensité à 1
+				spotLight.position.set(-8000, 4000, 10000 ); // Position du projecteur
+				spotLight.target.position.set(850,300,-1900); // Cible du projecteur
+				spotLight.angle = 90; // Angle du projecteur
 				spotLight.penumbra = 0.1;
 				spotLight.decay = 2;
-				spotLight.distance = 40000;
-				spotLight.castShadow = true;
+				spotLight.distance = 40000; // Distance max
+				spotLight.castShadow = true; // Projette des ombres
 				spotLight.shadow.mapSize.width = 32768;
 				spotLight.shadow.mapSize.height = 32768;
-				spotLight.shadow.camera.near = 10;
+				spotLight.shadow.camera.near = 10; 
 				spotLight.shadow.camera.far = 40000;
 				spotLight.shadow.focus = 1;
-				scene.add( spotLight );
-				scene.add( spotLight.target );
+				scene.add( spotLight ); // Ajout du projecteur à la scène
+				scene.add( spotLight.target ); // Ajout de la cible du projecteur à la scène
 
-				light = new THREE.PointLight( 0xff0000, 0);
-				light.distance = 500;
-				light.position.set( 250, 250, -250 );
-				scene.add( light );
+				light = new THREE.PointLight( 0xff0000, 0); // Point lumineux
+				light.distance = 500; // Distance d'affichage du point lumineux
+				light.position.set( 250, 250, -250 ); // Position du point lumineux
+				scene.add( light ); // Ajout du point lumineux à la scène
 
 				// shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
 				// scene.add( shadowCameraHelper );
@@ -251,17 +244,17 @@
 					scene.add( Col );
 				} 
 
-				// Temple.add(allObjects);
+//-------------------------------------------------Objet magique-------------------------------------------------//
+
 				const surprise = new THREE.SphereGeometry( 25, 32, 32 );
 				Surprise = new THREE.Mesh(surprise, magicalMaterial);
 				Surprise.position.set(250,250,-250);
-				Surprise.reflectivity = 1;
 				Surprise.receiveShadow = true;
 				Surprise.castShadow = true;
-				Surprise.visible = false;
+				Surprise.visible = false; // L'objet est invisible
 				scene.add(Surprise);
 
-				//-----------------------------------------------------Rendu-----------------------------------------------------//
+//-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -298,12 +291,12 @@
 				// spotLight.position.y += 2;
 				// spotLight.position.z += -2;
 				
-				Surprise.position.z += -zSurprise;
-				camera.position.z += -zCamera;
-				light.position.z += -zSurprise;
-				if(Surprise.position.z < -3550 || Surprise.position.z > -250){
-					zSurprise = -zSurprise;
-					zCamera = - zCamera;
+				Surprise.position.z += -zSurprise; // Déplacement en profondeur de l'objet
+				camera.position.z += -zCamera; // Déplacement en profondeur de la caméra
+				light.position.z += -zSurprise; // Déplacement en profondeur du point lumineux
+				if(Surprise.position.z < -3550 || Surprise.position.z > -250){ // Si position de l'objet strictement inférieur à -3550 ou strictement supérieur à -250 alors inversement des valeurs
+					zSurprise = -zSurprise; // Inversement de la valeur
+					zCamera = - zCamera; // Inversement de la valeur
 				}
 
 				stats.update();
@@ -323,59 +316,63 @@
 
 				gui = new GUI();
 
+				// Paramètres
 				const params = {
-					'Soleil' : spotLight.position.x,
+					'Soleil' : spotLight.position.y,
 					'Intensité' : spotLight.intensity,
 					'Objet magique' : false
 				};
 
+				// Dossiers 
 				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
+				const magicalFolder = gui.addFolder("Objet magique") // Ajout d'un dossier "Objet magique"
 
+				// 1er paramètre : Changement de l'intensité
 				lightFolder.add( params, 'Intensité', 0, 10, 0.5 ).onChange( function ( val ) {
-				spotLight.intensity = val;
-				render();
+					spotLight.intensity = val; // Modification de l'intensité du projecteur
+					render();
 				} );	
 
+				// 2eme paramètre : Trajectoire de la lumière
 				lightFolder.add( params, 'Soleil', -10000, 10000,100).onChange( function ( val ) {
-					spotLight.position.x = val;
+					spotLight.position.x = val; // Modification de la position x du projecteur
 					spotLight.position.y = Math.sqrt(Math.pow(10000,2)-Math.pow(val,2)); // x² + y² = d² donc y² = d² - x² donc y = √(d² - x²)
 					spotLight.position.z = -val; // Pour course du soleil en diagonal
 					render();
 				} );
 
-				gui.add(params, 'Objet magique').onChange( function ( bin ){
-					if(bin == true){
-					Surprise.position.set(250,250,-250);
-					Surprise.visible = true;
-					camera.position.set(-100,250,-250);
-					light.position.set( 250, 250, -250 );
-					camera.lookAt(Surprise.position);
-					zSurprise = 1;
-					zCamera = 1;
-					spotLight.intensity = 0;
-					light.intensity = 3;
-					console.log(bin);
-					}else{
-						Surprise.visible = false;
-						camera.position.set(850,500,1500);
-						spotLight.intensity = 1;
-						light.intensity = 0;
-						zSurprise = 0;
-						zCamera = 0;
+				// 3eme paramètre : Objet magique
+				magicalFolder.add(params, 'Objet magique').onChange( function ( bool ){
+					if(bool == true){ // Si le bouton est activé
+					Surprise.position.set(250,250,-250); // Position de l'objet
+					Surprise.visible = true; // L'objet devient visible
+					camera.position.set(-100,250,-250); // Position de la caméra
+					light.position.set( 250, 250, -250 ); // Position du point lumineux
+					camera.lookAt(Surprise.position); // Cible de la caméra
+					zSurprise = 1; // Changement de la valeur de déplacement en profondeur de l'objet et du point lumineux 
+					zCamera = 1; // Changement de la valeur de déplacement en profondeur de la caméra
+					spotLight.intensity = 0; // Changement de l'intensité du projecteur
+					light.intensity = 2; // Changement de l'intensité du point lumineux
+					}else{ // Si le bouton n'est pas activé
+						Surprise.visible = false; // L'objet redevient invisible
+						camera.position.set(850,500,1500); // Position de la caméra
+						spotLight.intensity = 1; // Changement de l'intensité du projecteur
+						light.intensity = 0; // Changement de l'intensité du point lumineux
+						zSurprise = 0; // Changement de la valeur de déplacement en profondeur de l'objet et du point lumineux 
+						zCamera = 0; // Changement de la valeur de déplacement en profondeur de la caméra
 					}
 					render();
 				});
 
-
-
-				lightFolder.open();
-				gui.open();
+				lightFolder.open(); // Ouverture du dossier "Lumière"
+				gui.open(); // Ouverture du dossier principal
 
 			}
 
 //---------------------------------------------Fonction OrbitControl---------------------------------------------//
+
 			function orbit(){
-				controls = new OrbitControls(camera, renderer.domElement);
+				let controls = new OrbitControls(camera, renderer.domElement);
 			}
 
 //----------------------------------------------Appel des fonctions----------------------------------------------//
