@@ -1,378 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Greek Temple</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	</head>
-	<body>
+<head>
+	<title>Greek Temple</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+</head>
+<body>
 
-		<script type="module">
+<script type="module">
 
-			import * as THREE from '../three.js-master/build/three.module.js';
-									
-			import Stats from '../three.js-master/examples/jsm/libs/stats.module.js';
+	import * as THREE from '../three.js-master/build/three.module.js';
 
-			import { GUI } from '../three.js-master/examples/jsm/libs/dat.gui.module.js';
+	import Stats from '../three.js-master/examples/jsm/libs/stats.module.js';
 
-			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
-			import { FirstPersonControls } from '../three.js-master/examples/jsm/controls/FirstPersonControls.js';
-			
-//---------------------------------------------------Variables---------------------------------------------------//
+	import { GUI } from '../three.js-master/examples/jsm/libs/dat.gui.module.js';
 
-			let camera, controls, scene, renderer;
-			let spotLight, lightHelper, shadowCameraHelper;
-			let gui;
-			let container, stats;
-			let Temple = new THREE.Group();
+	import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
+	import { FirstPersonControls } from '../three.js-master/examples/jsm/controls/FirstPersonControls.js';
 
-			// Dimensions cube colonnes
-			let widthCC = 200;
-			let heightCC = 40;
-			let depthCC = 200; 
-			// Colonne
-			let baseRadius = 75;
-			let topRadius = 50;
-			let topCol, Col;
-			// Hauteur sous plafond
-			let ceilingHeight = 590;
-			// Dalle, sol et toit
-			let widthG = 1700;
-			let heightG = 60;
-			let depthG = 3800;
-			let heightR = 150;
-			let groundZ = -30;
-			let Ground, Floor, roofMesh, blockMesh;
-			// Delta
-			let deltaWidthP = 30;
-			let distCol = 300;
-			const clock = new THREE.Clock();
-//---------------------------------------------------Fonctions---------------------------------------------------//
+	//---------------------------------------------------Variables---------------------------------------------------//
 
-//-------------------------------------------------Fonction init-------------------------------------------------//
+	let camera, controls, scene, renderer;
+	let spotLight, lightHelper, shadowCameraHelper;
+	let gui;
+	let container, stats;
+	let Temple = new THREE.Group();
 
-			function init() {
+	// Dimensions cube colonnes
+	let widthCC = 200;
+	let heightCC = 40;
+	let depthCC = 200;
+	// Colonne
+	let baseRadius = 75;
+	let topRadius = 50;
+	let topCol, Col;
+	// Hauteur sous plafond
+	let ceilingHeight = 590;
+	// Dalle, sol et toit
+	let widthG = 1700;
+	let heightG = 60;
+	let depthG = 3800;
+	let heightR = 150;
+	let groundZ = -30;
+	let Ground, Floor, roofMesh, blockMesh;
+	// Delta
+	let deltaWidthP = 30;
+	let distCol = 300;
+	const clock = new THREE.Clock();
+	//---------------------------------------------------Fonctions---------------------------------------------------//
+
+	//-------------------------------------------------Fonction init-------------------------------------------------//
+
+	function init() {
 
 //--------------------------------------------Moniteur de performance--------------------------------------------//
 
-				stats = new Stats();
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
-				container.appendChild( stats.dom );
+		stats = new Stats();
+		container = document.createElement( 'div' );
+		document.body.appendChild( container );
+		container.appendChild( stats.dom );
 
 //-----------------------------------------------------Caméra----------------------------------------------------//
-				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.set( 0, 25, 0 );
-				// camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 20000 );
-				// camera.position.set(850,500,1500);
-				// camera.lookAt(850,0,0);
-				//camera.lookAt( scene.position );
-				const listener = new THREE.AudioListener();
-				camera.add( listener );
+		camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
+		camera.position.set( 0, 25, 0 );
+		// camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 20000 );
+		// camera.position.set(850,500,1500);
+		// camera.lookAt(850,0,0);
+		//camera.lookAt( scene.position );
+		const listener = new THREE.AudioListener();
+		camera.add( listener );
 
 
 
 //----------------------------------------------------Textures---------------------------------------------------//
 
-				const loader = new THREE.TextureLoader();
-				const texture = loader.load( 'Textures/black-marble.webp' );
-				const material = new THREE.MeshPhongMaterial( { map: texture, dithering: true } );
-				const test = loader.load('Textures/FloorsCheckerboard_S_Diffuse.jpg');
-				const materialTest = new THREE.MeshBasicMaterial( { map: test, dithering: true } );
-				const marble = loader.load('Textures/whitemarble.jpg');
-				const marbleW = new THREE.MeshPhongMaterial( {map : marble, dithering: true } );
-				const orange = loader.load('Textures/orange.jpg');
-				const orangeg = new THREE.MeshPhongMaterial( {map : orange, dithering: true } );
-				const ColumnGreek = loader.load('Textures/marblewhite.jpg');
-				const columnG = new THREE.MeshPhongMaterial( {map : ColumnGreek, dithering: true } );
-				const stones = loader.load('Textures/stones2.jpg');
-				stones.wrapS = THREE.RepeatWrapping;
-				stones.wrapT = THREE.RepeatWrapping;
-				stones.repeat.set(80, 80 );
-				marble.wrapS = THREE.RepeatWrapping;
-				marble.wrapT = THREE.RepeatWrapping;
-				marble.repeat.set(5, 1 );
-				orange.wrapS = THREE.RepeatWrapping;
-				orange.wrapT = THREE.RepeatWrapping;
-				orange.repeat.set(2, 2 );
-				const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
-				const background = loader.load('Textures/background5.jpg');
-				background.wrapS = THREE.RepeatWrapping;
-				background.wrapT = THREE.RepeatWrapping;
-				background.repeat.set(1, 1 );
+		const loader = new THREE.TextureLoader();
+		const texture = loader.load( 'Textures/black-marble.webp' );
+		const material = new THREE.MeshPhongMaterial( { map: texture, dithering: true } );
+		const test = loader.load('Textures/FloorsCheckerboard_S_Diffuse.jpg');
+		const materialTest = new THREE.MeshBasicMaterial( { map: test, dithering: true } );
+		const marble = loader.load('Textures/whitemarble.jpg');
+		const marbleW = new THREE.MeshPhongMaterial( {map : marble, dithering: true } );
+		const orange = loader.load('Textures/orange.jpg');
+		const orangeg = new THREE.MeshPhongMaterial( {map : orange, dithering: true } );
+		const ColumnGreek = loader.load('Textures/marblewhite.jpg');
+		const columnG = new THREE.MeshPhongMaterial( {map : ColumnGreek, dithering: true } );
+		const stones = loader.load('Textures/stones2.jpg');
+		stones.wrapS = THREE.RepeatWrapping;
+		stones.wrapT = THREE.RepeatWrapping;
+		stones.repeat.set(80, 80 );
+		marble.wrapS = THREE.RepeatWrapping;
+		marble.wrapT = THREE.RepeatWrapping;
+		marble.repeat.set(5, 1 );
+		orange.wrapS = THREE.RepeatWrapping;
+		orange.wrapT = THREE.RepeatWrapping;
+		orange.repeat.set(2, 2 );
+		const stonesG = new THREE.MeshPhongMaterial( {map : stones, dithering: true } );
+		const background = loader.load('Textures/background5.jpg');
+		background.wrapS = THREE.RepeatWrapping;
+		background.wrapT = THREE.RepeatWrapping;
+		background.repeat.set(1, 1 );
 
 //-----------------------------------------------------Scene-----------------------------------------------------//
 
-				scene = new THREE.Scene();
-				scene.background = background;
+		scene = new THREE.Scene();
+		scene.background = background;
 
 //-----------------------------------------------Lumières et ombres----------------------------------------------//
 
-				const ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
-				scene.add( ambient );
+		const ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
+		scene.add( ambient );
 
-				spotLight = new THREE.SpotLight( 0xffffff, 1);
-				spotLight.position.set(  -300, 1000, 2000 );
-				spotLight.target.position.set(500,500,0);
-				spotLight.angle = 90;
-				spotLight.penumbra = 0.1;
-				spotLight.decay = 2;
-				spotLight.distance = 20000;
-				spotLight.castShadow = true;
-				spotLight.shadow.mapSize.width = 8192;
-				spotLight.shadow.mapSize.height = 8192;
-				spotLight.shadow.camera.near = 10;
-				spotLight.shadow.camera.far = 20000;
-				spotLight.shadow.focus = 1;
-				scene.add( spotLight );
-				scene.add( spotLight.target );
+		spotLight = new THREE.SpotLight( 0xffffff, 1);
+		spotLight.position.set(  -300, 1000, 2000 );
+		spotLight.target.position.set(500,500,0);
+		spotLight.angle = 90;
+		spotLight.penumbra = 0.1;
+		spotLight.decay = 2;
+		spotLight.distance = 20000;
+		spotLight.castShadow = true;
+		spotLight.shadow.mapSize.width = 8192;
+		spotLight.shadow.mapSize.height = 8192;
+		spotLight.shadow.camera.near = 10;
+		spotLight.shadow.camera.far = 20000;
+		spotLight.shadow.focus = 1;
+		scene.add( spotLight );
+		scene.add( spotLight.target );
 
-				// shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
-				// scene.add( shadowCameraHelper );
+		// shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
+		// scene.add( shadowCameraHelper );
 
 
 
 
 //---------------------------------------------Construction du temple--------------------------------------------//
 
-				// Sol
-				const floor = new THREE.BoxBufferGeometry(20000,heightG,20000);
-				Floor = new THREE.Mesh(floor, stonesG);
-				Floor.position.set(widthG/2,-210,-(depthG/2));
-				Floor.receiveShadow = true;
-				scene.add(Floor);
+		// Sol
+		const floor = new THREE.BoxBufferGeometry(20000,heightG,20000);
+		Floor = new THREE.Mesh(floor, stonesG);
+		Floor.position.set(widthG/2,-210,-(depthG/2));
+		Floor.receiveShadow = true;
+		scene.add(Floor);
 
-				//Prisme à base triangulaire
-				const shape = new THREE.Shape();
-				shape.moveTo( -deltaWidthP,ceilingHeight+heightR); // Point de base
-				shape.lineTo( widthG+2*deltaWidthP,ceilingHeight+heightR); // Point de droite
-				shape.lineTo( widthG/2, ceilingHeight+heightR + 250 ); // Point du haut
+		//Prisme à base triangulaire
+		const shape = new THREE.Shape();
+		shape.moveTo( -deltaWidthP,ceilingHeight+heightR); // Point de base
+		shape.lineTo( widthG+2*deltaWidthP,ceilingHeight+heightR); // Point de droite
+		shape.lineTo( widthG/2, ceilingHeight+heightR + 250 ); // Point du haut
 
-				const extrudeSettings = {
-					steps: 1,
-					depth: depthG,
-					bevelEnabled: false,
-				};			
- 
-				let geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
-				let prism = new THREE.Mesh(geometry, marbleW);
-				prism.receiveShadow = true;
-				prism.castShadow = true; 
-				prism.position.z = -depthG;
+		const extrudeSettings = {
+			steps: 1,
+			depth: depthG,
+			bevelEnabled: false,
+		};
 
-				scene.add(prism);	
+		let geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
+		let prism = new THREE.Mesh(geometry, marbleW);
+		prism.receiveShadow = true;
+		prism.castShadow = true;
+		prism.position.z = -depthG;
 
-				// Dalles
-				for(let zGround = 0; zGround < 3; zGround++){
-					const ground = new THREE.BoxBufferGeometry(widthG+50*zGround,heightG,depthG+50*zGround);
-					Ground = new THREE.Mesh(ground, orangeg);
-					Ground.position.set(widthG/2,-30 + zGround*-heightG,-(depthG/2));
-					Ground.receiveShadow = true;
-					Ground.castShadow = true;
-					scene.add(Ground);
-				}
+		scene.add(prism);
 
-				// Toit
-				const roof = new THREE.BoxBufferGeometry(widthG,heightR,depthG);
-				roofMesh = new THREE.Mesh(roof, marbleW);
-				roofMesh.position.set(widthG/2,ceilingHeight + heightR/2,-(depthG/2));
-				roofMesh.receiveShadow = true;
-				roofMesh.castShadow = true;
-				scene.add(roofMesh);
+		// Dalles
+		for(let zGround = 0; zGround < 3; zGround++){
+			const ground = new THREE.BoxBufferGeometry(widthG+50*zGround,heightG,depthG+50*zGround);
+			Ground = new THREE.Mesh(ground, orangeg);
+			Ground.position.set(widthG/2,-30 + zGround*-heightG,-(depthG/2));
+			Ground.receiveShadow = true;
+			Ground.castShadow = true;
+			scene.add(Ground);
+		}
 
-				// Salle...
-				const block = new THREE.BoxBufferGeometry(widthG-2*(distCol+baseRadius),ceilingHeight,depthG-2*(2*distCol-baseRadius));
-				blockMesh = new THREE.Mesh(block, marbleW);
-				blockMesh.position.set(widthG/2,ceilingHeight/2,-(depthG/2));
-				blockMesh.receiveShadow = true;
-				blockMesh.castShadow = true;
-				scene.add(blockMesh);
+		// Toit
+		const roof = new THREE.BoxBufferGeometry(widthG,heightR,depthG);
+		roofMesh = new THREE.Mesh(roof, marbleW);
+		roofMesh.position.set(widthG/2,ceilingHeight + heightR/2,-(depthG/2));
+		roofMesh.receiveShadow = true;
+		roofMesh.castShadow = true;
+		scene.add(roofMesh);
 
-				// Colonnes //
+		// Salle...
+		const block = new THREE.BoxBufferGeometry(widthG-2*(distCol+baseRadius),ceilingHeight,depthG-2*(2*distCol-baseRadius));
+		blockMesh = new THREE.Mesh(block, marbleW);
+		blockMesh.position.set(widthG/2,ceilingHeight/2,-(depthG/2));
+		blockMesh.receiveShadow = true;
+		blockMesh.castShadow = true;
+		scene.add(blockMesh);
 
-				// Modèle de la colonne
-				const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
-                const column = new THREE.CylinderBufferGeometry(topRadius,baseRadius,ceilingHeight-heightCC,320);
+		// Colonnes //
 
-				// Colonnes de devant et colonnes arrières
-				for(let xCol = 0; xCol < 6; xCol++){
-					Col = new THREE.Mesh( column, columnG );
-					Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
-					Col.receiveShadow = true;
-					Col.castShadow = true;
-					scene.add( Col );
+		// Modèle de la colonne
+		const top = new THREE.BoxBufferGeometry( widthCC, heightCC, depthCC );
+		const column = new THREE.CylinderBufferGeometry(topRadius,baseRadius,ceilingHeight-heightCC,320);
 
-					topCol = new THREE.Mesh( top, orangeg );
-                	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
-					topCol.receiveShadow = true;
-					topCol.castShadow = true;
-					scene.add( topCol );
-					
-					topCol = new THREE.Mesh( top, orangeg );
-                	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
-					topCol.receiveShadow = true;
-					topCol.castShadow = true;
-					scene.add( topCol );					
-					
-					Col = new THREE.Mesh( column, columnG );
-					Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
-					Col.receiveShadow = true;
-					Col.castShadow = true;
-					scene.add( Col );
-				}
+		// Colonnes de devant et colonnes arrières
+		for(let xCol = 0; xCol < 6; xCol++){
+			Col = new THREE.Mesh( column, columnG );
+			Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-(depthCC/2));
+			Col.receiveShadow = true;
+			Col.castShadow = true;
+			scene.add( Col );
 
-				// Colonnes de gauche et de droite
-				for(let zCol = 1; zCol < 12; zCol++){
-					topCol = new THREE.Mesh( top, orangeg );
-					topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
-					topCol.receiveShadow = true;
-					topCol.castShadow = true;
-					scene.add( topCol );
+			topCol = new THREE.Mesh( top, orangeg );
+			topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-(depthCC/2));
+			topCol.receiveShadow = true;
+			topCol.castShadow = true;
+			scene.add( topCol );
 
-					Col = new THREE.Mesh( column, columnG );
-					Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-zCol*distCol);
-					Col.receiveShadow = true;
-					Col.castShadow = true;
-					scene.add( Col );
-					
-					topCol = new THREE.Mesh( top, orangeg );
-					topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
-					topCol.receiveShadow = true;
-					topCol.castShadow = true;
-					scene.add( topCol );
+			topCol = new THREE.Mesh( top, orangeg );
+			topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
+			topCol.receiveShadow = true;
+			topCol.castShadow = true;
+			scene.add( topCol );
 
-					Col = new THREE.Mesh( column, columnG );
-					Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-zCol*distCol);
-					Col.receiveShadow = true;
-					Col.castShadow = true;
-					scene.add( Col );
-				}// Temple.add(allObjects);
+			Col = new THREE.Mesh( column, columnG );
+			Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
+			Col.receiveShadow = true;
+			Col.castShadow = true;
+			scene.add( Col );
+		}
+
+		// Colonnes de gauche et de droite
+		for(let zCol = 1; zCol < 12; zCol++){
+			topCol = new THREE.Mesh( top, orangeg );
+			topCol.position.set(widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
+			topCol.receiveShadow = true;
+			topCol.castShadow = true;
+			scene.add( topCol );
+
+			Col = new THREE.Mesh( column, columnG );
+			Col.position.set(widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-zCol*distCol);
+			Col.receiveShadow = true;
+			Col.castShadow = true;
+			scene.add( Col );
+
+			topCol = new THREE.Mesh( top, orangeg );
+			topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
+			topCol.receiveShadow = true;
+			topCol.castShadow = true;
+			scene.add( topCol );
+
+			Col = new THREE.Mesh( column, columnG );
+			Col.position.set(widthG-widthCC/2,(ceilingHeight-heightCC)/2,-(depthCC/2)-zCol*distCol);
+			Col.receiveShadow = true;
+			Col.castShadow = true;
+			scene.add( Col );
+		}// Temple.add(allObjects);
 //----------------------------------------------------Audio-----------------------------------------------------//
-                // son ambiant
-				const audioLoader = new THREE.AudioLoader();
-				const sound1 = new THREE.Audio( listener );
-				audioLoader.load( 'sounds/son1.ogg', function ( buffer ) {
+		// son ambiant
+		const audioLoader = new THREE.AudioLoader();
+		const sound1 = new THREE.Audio( listener );
+		audioLoader.load( 'sounds/son1.ogg', function ( buffer ) {
 
-					sound1.setBuffer( buffer );
-					sound1.setLoop( true );
-					sound1.setVolume( 0.25 );
-					sound1.play();
+			sound1.setBuffer( buffer );
+			sound1.setLoop( true );
+			sound1.setVolume( 0.25 );
+			sound1.play();
 
-				} );
-				//Son dans le temple
-				const sound2 = new THREE.PositionalAudio( listener );
-				audioLoader.load( 'sounds/son2.ogg', function ( buffer ) {
+		} );
+		//Son dans le temple
+		const sound2 = new THREE.PositionalAudio( listener );
+		audioLoader.load( 'sounds/son2.ogg', function ( buffer ) {
 
-					sound2.setBuffer( buffer );
-					sound2.setLoop( true );
-					sound2.setRefDistance( 2 );
-					sound2.setVolume( 30 );
-					sound2.play();
+			sound2.setBuffer( buffer );
+			sound2.setLoop( true );
+			sound2.setRefDistance( 2 );
+			sound2.setVolume( 30 );
+			sound2.play();
 
-				} );
-				blockMesh.add( sound2 );
+		} );
+		blockMesh.add( sound2 );
 
 //-----------------------------------------------------Rendu-----------------------------------------------------//
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.body.appendChild( renderer.domElement );
-				renderer.shadowMap.enabled = true;
-				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-				renderer.outputEncoding = THREE.sRGBEncoding;
-				window.addEventListener( 'resize', onWindowResize, false );
-				container.appendChild( renderer.domElement );
+		renderer = new THREE.WebGLRenderer( { antialias: true } );
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+		renderer.outputEncoding = THREE.sRGBEncoding;
+		window.addEventListener( 'resize', onWindowResize, false );
+		container.appendChild( renderer.domElement );
 
-			}
+	}
 
-//--------------------------------------------Fonction onWindowsResize-------------------------------------------//
+	//--------------------------------------------Fonction onWindowsResize-------------------------------------------//
 
-			function onWindowResize() {
+	function onWindowResize() {
 
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				controls.handleResize();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		controls.handleResize();
 
-			}
+	}
 
-//------------------------------------------------Fonction animate-----------------------------------------------//
+	//------------------------------------------------Fonction animate-----------------------------------------------//
 
-			function animate() {
+	function animate() {
 
-				requestAnimationFrame( animate );
+		requestAnimationFrame( animate );
 
-				// camera.position.z += -1;
-				// camera.position.y -= 1;
-				// camera.position.x += 2;
-				stats.update();
-				render();
-
-
-			}
-			
-//-----------------------------------------------Fonction de rendu-----------------------------------------------//
-
-			function render() {
-				const delta = clock.getDelta();
-				controls.update( delta );
-				renderer.render( scene, camera );
-			}
-
-//--------------------------------------------------Fonction GUI-------------------------------------------------//
-
-			function buildGui() {
-
-				gui = new GUI();
-
-				const params = {
-					'Hauteur sous plafond' : ceilingHeight,
-					'intensity': spotLight.intensity
-				};
-
-				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
+		// camera.position.z += -1;
+		// camera.position.y -= 1;
+		// camera.position.x += 2;
+		stats.update();
+		render();
 
 
-				gui.add( params, 'Hauteur sous plafond', 1, 5,0.1).onChange( function ( val ) {
+	}
 
-					// ceilingHeight = val;
-					console.log(ceilingHeight);
-					// Temple.scale.x = val;
-					render();
+	//-----------------------------------------------Fonction de rendu-----------------------------------------------//
 
-				} );
+	function render() {
+		const delta = clock.getDelta();
+		controls.update( delta );
+		renderer.render( scene, camera );
+	}
 
-				lightFolder.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
+	//--------------------------------------------------Fonction GUI-------------------------------------------------//
 
-					spotLight.intensity = val;
-					render();
+	function buildGui() {
 
-				} );
-				lightFolder.open();
-				gui.open();
+		gui = new GUI();
 
-			}
+		const params = {
+			'Hauteur sous plafond' : ceilingHeight,
+			'intensity': spotLight.intensity
+		};
 
-//---------------------------------------------Fonction Control---------------------------------------------//
- 			function control(){
-			controls = new FirstPersonControls( camera, renderer.domElement );
+		const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
 
-			controls.movementSpeed = 800;
-			controls.lookSpeed = 0.20;
-			controls.noFly = true;
-			controls.lookVertical = true;}
-//----------------------------------------------Appel des fonctions----------------------------------------------//
 
-			init();
-			control();
-			animate();
-			buildGui();
+		gui.add( params, 'Hauteur sous plafond', 1, 5,0.1).onChange( function ( val ) {
+
+			// ceilingHeight = val;
+			console.log(ceilingHeight);
+			// Temple.scale.x = val;
 			render();
 
-			
-		</script>
+		} );
 
-	</body>
+		lightFolder.add( params, 'intensity', 0, 10, 0.5 ).onChange( function ( val ) {
+
+			spotLight.intensity = val;
+			render();
+
+		} );
+		lightFolder.open();
+		gui.open();
+
+	}
+
+	//---------------------------------------------Fonction Control---------------------------------------------//
+	function control(){
+		controls = new FirstPersonControls( camera, renderer.domElement );
+
+		controls.movementSpeed = 800;
+		controls.lookSpeed = 0.20;
+		controls.noFly = true;
+		controls.lookVertical = true;}
+	//----------------------------------------------Appel des fonctions----------------------------------------------//
+
+	init();
+	control();
+	animate();
+	buildGui();
+	render();
+
+
+</script>
+
+</body>
 </html>
