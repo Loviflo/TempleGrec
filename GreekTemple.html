@@ -268,7 +268,7 @@
 //-----------------------------------------------------Model-----------------------------------------------------//
 				
 				const loader3D = new FBXLoader();
-				loader3D.load( 'Models/fbx/Assassin2.fbx', function ( object ) {
+				loader3D.load( 'Models/fbx/Crouching.fbx', function ( object ) { // Personnage accroupi
 
 					mixer = new THREE.AnimationMixer( object );
 
@@ -285,11 +285,28 @@
 						}
 
 					} );
-					object.position.set(850,-90,-50);
+					object.position.set(850,990,-70);
 					object.rotation.set(0,0,0);
 					scene.add( object );
 
 				} );
+
+				loader3D.load('Models/fbx/Ikaros.fbx', function(object) { // Aigle
+					object.traverse( function ( child ) {
+
+					if ( child.isMesh ) {
+
+						child.castShadow = true;
+						child.receiveShadow = true;
+
+					}
+
+					} );
+					object.scale.set(0.5,0.5,0.5);
+					object.position.set(700,1100,0);
+					scene.add(object);
+				});
+
 //-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
