@@ -16,10 +16,11 @@
 			import { GUI } from '../three.js-master/examples/jsm/libs/dat.gui.module.js';
 
 			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
+			import { FirstPersonControls } from '../three.js-master/examples/jsm/controls/FirstPersonControls.js';
 			
 //---------------------------------------------------Variables---------------------------------------------------//
 
-			let camera, scene, renderer;
+			let camera, controls, scene, renderer;
 			let spotLight, lightHelper, shadowCameraHelper;
 			let gui;
 			let container, stats;
@@ -45,7 +46,7 @@
 			// Delta
 			let deltaWidthP = 30;
 			let distCol = 300;
-
+			const clock = new THREE.Clock();
 //---------------------------------------------------Fonctions---------------------------------------------------//
 
 //-------------------------------------------------Fonction init-------------------------------------------------//
@@ -60,11 +61,15 @@
 				container.appendChild( stats.dom );
 
 //-----------------------------------------------------Caméra----------------------------------------------------//
-
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 20000 );
-				camera.position.set(850,500,1500);
+				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.set( 0, 25, 0 );
+				// camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 20000 );
+				// camera.position.set(850,500,1500);
 				// camera.lookAt(850,0,0);
 				//camera.lookAt( scene.position );
+				const listener = new THREE.AudioListener();
+				camera.add( listener );
+
 
 
 //----------------------------------------------------Textures---------------------------------------------------//
@@ -124,6 +129,9 @@
 
 				// shadowCameraHelper = new THREE.CameraHelper( spotLight.shadow.camera );
 				// scene.add( shadowCameraHelper );
+
+
+
 
 //---------------------------------------------Construction du temple--------------------------------------------//
 
@@ -238,9 +246,39 @@
 					Col.receiveShadow = true;
 					Col.castShadow = true;
 					scene.add( Col );
-				} 
+				}// Temple.add(allObjects);
+//----------------------------------------------------Audio-----------------------------------------------------//
 
-				// Temple.add(allObjects);
+				const audioLoader = new THREE.AudioLoader();
+				const sound1 = new THREE.Audio( listener );
+				audioLoader.load( 'sounds/son1.ogg', function ( buffer ) {
+
+					sound1.setBuffer( buffer );
+					sound1.setLoop( true );
+					sound1.setVolume( 0.25 );
+					sound1.play();
+
+				} );
+				const sound2 = new THREE.PositionalAudio( listener );
+				audioLoader.load( 'sounds/son2.ogg', function ( buffer ) {
+
+					sound2.setBuffer( buffer );
+					sound2.setRefDistance( 50 );
+					sound2.play();
+
+				} );
+				blockMesh.add( sound2 );
+
+				const SoundControls = function () {
+
+					this.master = listener.getMasterVolume();
+					this.firstSphere = sound1.getVolume();
+					this.secondSphere = sound2.getVolume();
+					this.thirdSphere = sound3.getVolume();
+					this.Ambient = sound4.getVolume();
+
+				};
+
 //-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -263,6 +301,7 @@
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
+				controls.handleResize();
 
 			}
 
@@ -278,11 +317,14 @@
 				stats.update();
 				render();
 
+
 			}
 			
 //-----------------------------------------------Fonction de rendu-----------------------------------------------//
 
 			function render() {
+				const delta = clock.getDelta();
+				controls.update( delta );
 				renderer.render( scene, camera );
 			}
 
@@ -321,17 +363,23 @@
 			}
 
 //---------------------------------------------Fonction OrbitControl---------------------------------------------//
-			function orbit(){
-				controls = new OrbitControls(camera, renderer.domElement);
-			}
+ 			function control(){
+// 				controls = new OrbitControls(camera, renderer.domElement);
+//
+			controls = new FirstPersonControls( camera, renderer.domElement );
 
+			controls.movementSpeed = 300;
+			controls.lookSpeed = 0.20;
+			controls.noFly = true;
+			controls.lookVertical = true;}
 //----------------------------------------------Appel des fonctions----------------------------------------------//
 
 			init();
+			control();
 			animate();
 			buildGui();
 			render();
-			orbit();
+
 			
 		</script>
 
