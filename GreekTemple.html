@@ -9,13 +9,13 @@
 		<script type="module">
 
 			import * as THREE from '../three.js-master/build/three.module.js';
-									
+
 			import Stats from '../three.js-master/examples/jsm/libs/stats.module.js';
 
 			import { GUI } from '../three.js-master/examples/jsm/libs/dat.gui.module.js';
 
 			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
-			
+
 //---------------------------------------------------Variables---------------------------------------------------//
 
 			let camera, shadowCameraHelper;  // Caméra
@@ -34,7 +34,7 @@
 			// Hauteur sous plafond
 			let ceilingHeight = 590;
 			// Dalle, sol, toit et salle
-			let widthG = 1700; // Largeur 
+			let widthG = 1700; // Largeur
 			let heightG = 60; // Hauteur
 			let depthG = 3800; // Profondeur
 			let heightR = 150; // Hauteur
@@ -52,7 +52,7 @@
 //-------------------------------------------------Fonction init-------------------------------------------------//
 
 			function init() {
-				
+
 //--------------------------------------------Moniteur de performance--------------------------------------------//
 
 				stats = new Stats();
@@ -65,8 +65,14 @@
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 30000 );
 				camera.position.set(850,500,1500); // Position de la caméra
 
+//-----------------------------------------------------Audio----------------------------------------------------//
+
+				const listener = new THREE.AudioListener(); // création de la partie audio
+				camera.add(listener);	// ajout de l'audio à la caméra
+				const audioLoader = new THREE.AudioLoader(); // permet de charger les audios
+
 //----------------------------------------------------Textures---------------------------------------------------//
-				
+
 				const loader = new THREE.TextureLoader();
 
 				const test = loader.load('Textures/FloorsCheckerboard_S_Diffuse.jpg'); // Texture de test
@@ -114,7 +120,7 @@
 				spotLight.castShadow = true; // Projette des ombres
 				spotLight.shadow.mapSize.width = 32768;
 				spotLight.shadow.mapSize.height = 32768;
-				spotLight.shadow.camera.near = 10; 
+				spotLight.shadow.camera.near = 10;
 				spotLight.shadow.camera.far = 40000;
 				spotLight.shadow.focus = 1;
 				scene.add( spotLight ); // Ajout du projecteur à la scène
@@ -148,15 +154,15 @@
 					steps: 1,
 					depth: depthG,
 					bevelEnabled: false,
-				};			
- 
+				};
+
 				let geometry = new THREE.ExtrudeBufferGeometry( shape, extrudeSettings );
 				let prism = new THREE.Mesh(geometry, marbleW);
 				prism.receiveShadow = true;
-				prism.castShadow = true; 
+				prism.castShadow = true;
 				prism.position.z = -depthG;
 
-				scene.add(prism);	
+				scene.add(prism);
 
 				// Dalles
 				for(let zGround = 0; zGround < 3; zGround++){
@@ -203,13 +209,13 @@
 					topCol.receiveShadow = true;
 					topCol.castShadow = true;
 					scene.add( topCol );
-					
+
 					topCol = new THREE.Mesh( top, orangeg );
                 	topCol.position.set(widthCC/2 + xCol*distCol,ceilingHeight-heightCC/2,-depthG+depthCC/2);
 					topCol.receiveShadow = true;
 					topCol.castShadow = true;
-					scene.add( topCol );					
-					
+					scene.add( topCol );
+
 					Col = new THREE.Mesh( column, columnG );
 					Col.position.set(widthCC/2 + xCol*distCol,(ceilingHeight-heightCC)/2,-depthG+depthCC/2);
 					Col.receiveShadow = true;
@@ -230,7 +236,7 @@
 					Col.receiveShadow = true;
 					Col.castShadow = true;
 					scene.add( Col );
-					
+
 					topCol = new THREE.Mesh( top, orangeg );
 					topCol.position.set(widthG-widthCC/2,ceilingHeight-heightCC/2,-(depthCC/2)-zCol*distCol);
 					topCol.receiveShadow = true;
@@ -242,7 +248,19 @@
 					Col.receiveShadow = true;
 					Col.castShadow = true;
 					scene.add( Col );
-				} 
+				}
+
+//-------------------------------------------------Musique-------------------------------------------------//
+					const templeMusic = new THREE.Audio( listener );
+					audioLoader.load('sounds/odyssey.mp3', function(buffer) {
+
+						templeMusic.setBuffer(buffer); // on met la musique souhaitée dans le buffer
+						templeMusic.setLoop(true); // la musique est jouée en boucle
+						templeMusic.setVolume(0.5); // le volume est initialisé
+						templeMusic.play(); // la musique peut se jouer
+					});
+
+
 
 //-------------------------------------------------Objet magique-------------------------------------------------//
 
@@ -290,7 +308,7 @@
 				// spotLight.position.x += 2;
 				// spotLight.position.y += 2;
 				// spotLight.position.z += -2;
-				
+
 				Surprise.position.z += -zSurprise; // Déplacement en profondeur de l'objet
 				camera.position.z += -zCamera; // Déplacement en profondeur de la caméra
 				light.position.z += -zSurprise; // Déplacement en profondeur du point lumineux
@@ -298,12 +316,12 @@
 					zSurprise = -zSurprise; // Inversement de la valeur
 					zCamera = - zCamera; // Inversement de la valeur
 				}
-				
+
 				stats.update();
 				render();
 
 			}
-			
+
 //-----------------------------------------------Fonction de rendu-----------------------------------------------//
 
 			function render() {
@@ -323,7 +341,7 @@
 					'Objet magique' : false
 				};
 
-				// Dossiers 
+				// Dossiers
 				const lightFolder = gui.addFolder("Lumière") // Ajout d'un dossier "Lumière"
 				const magicalFolder = gui.addFolder("Objet magique") // Ajout d'un dossier "Objet magique"
 
@@ -331,7 +349,7 @@
 				lightFolder.add( params, 'Intensité', 0, 10, 0.5 ).onChange( function ( val ) {
 					spotLight.intensity = val; // Modification de l'intensité du projecteur
 					render();
-				} );	
+				} );
 
 				// 2eme paramètre : Trajectoire de la lumière
 				lightFolder.add( params, 'Soleil', -10000, 10000,100).onChange( function ( val ) {
@@ -349,7 +367,7 @@
 					camera.position.set(-100,250,-250); // Position de la caméra
 					light.position.set( 250, 250, -250 ); // Position du point lumineux
 					camera.lookAt(Surprise.position); // Cible de la caméra
-					zSurprise = 1; // Changement de la valeur de déplacement en profondeur de l'objet et du point lumineux 
+					zSurprise = 1; // Changement de la valeur de déplacement en profondeur de l'objet et du point lumineux
 					zCamera = 1; // Changement de la valeur de déplacement en profondeur de la caméra
 					spotLight.intensity = 0; // Changement de l'intensité du projecteur
 					light.intensity = 2; // Changement de l'intensité du point lumineux
@@ -358,7 +376,7 @@
 						camera.position.set(850,500,1500); // Position de la caméra
 						spotLight.intensity = 1; // Changement de l'intensité du projecteur
 						light.intensity = 0; // Changement de l'intensité du point lumineux
-						zSurprise = 0; // Changement de la valeur de déplacement en profondeur de l'objet et du point lumineux 
+						zSurprise = 0; // Changement de la valeur de déplacement en profondeur de l'objet et du point lumineux
 						zCamera = 0; // Changement de la valeur de déplacement en profondeur de la caméra
 					}
 					render();
@@ -374,7 +392,7 @@
 			function orbit(){
 				let controls = new OrbitControls(camera, renderer.domElement);
 				controls.maxPolarAngle = Math.PI / 2; // Contraint l'angle maximal
-				controls.minDistance = 100; // Distance minimal 
+				controls.minDistance = 100; // Distance minimal
 				controls.maxDistance = 15000; // Distance maximal
 				controls.target.set(850,-170,-1900); // Cible de l'orbit
 				controls.update();
@@ -387,7 +405,7 @@
 			buildGui();
 			render();
 			orbit();
-			
+
 		</script>
 
 	</body>
