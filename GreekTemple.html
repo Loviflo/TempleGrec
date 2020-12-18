@@ -268,7 +268,7 @@
 //-----------------------------------------------------Model-----------------------------------------------------//
 				
 				const loader3D = new FBXLoader();
-				loader3D.load( 'Models/fbx/Assassin.fbx', function ( object ) {
+				loader3D.load( 'Models/fbx/Assassin2.fbx', function ( object ) {
 
 					mixer = new THREE.AnimationMixer( object );
 
@@ -286,6 +286,7 @@
 
 					} );
 					object.position.set(850,-90,-50);
+					object.rotation.set(0,0,0);
 					scene.add( object );
 
 				} );
