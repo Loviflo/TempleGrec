@@ -248,7 +248,7 @@
 					scene.add( Col );
 				}// Temple.add(allObjects);
 //----------------------------------------------------Audio-----------------------------------------------------//
-
+                // son ambiant
 				const audioLoader = new THREE.AudioLoader();
 				const sound1 = new THREE.Audio( listener );
 				audioLoader.load( 'sounds/son1.ogg', function ( buffer ) {
@@ -259,25 +259,18 @@
 					sound1.play();
 
 				} );
+				//Son dans le temple
 				const sound2 = new THREE.PositionalAudio( listener );
 				audioLoader.load( 'sounds/son2.ogg', function ( buffer ) {
 
 					sound2.setBuffer( buffer );
-					sound2.setRefDistance( 50 );
+					sound2.setLoop( true );
+					sound2.setRefDistance( 2 );
+					sound2.setVolume( 30 );
 					sound2.play();
 
 				} );
 				blockMesh.add( sound2 );
-
-				const SoundControls = function () {
-
-					this.master = listener.getMasterVolume();
-					this.firstSphere = sound1.getVolume();
-					this.secondSphere = sound2.getVolume();
-					this.thirdSphere = sound3.getVolume();
-					this.Ambient = sound4.getVolume();
-
-				};
 
 //-----------------------------------------------------Rendu-----------------------------------------------------//
 
@@ -362,13 +355,11 @@
 
 			}
 
-//---------------------------------------------Fonction OrbitControl---------------------------------------------//
+//---------------------------------------------Fonction Control---------------------------------------------//
  			function control(){
-// 				controls = new OrbitControls(camera, renderer.domElement);
-//
 			controls = new FirstPersonControls( camera, renderer.domElement );
 
-			controls.movementSpeed = 300;
+			controls.movementSpeed = 800;
 			controls.lookSpeed = 0.20;
 			controls.noFly = true;
 			controls.lookVertical = true;}
