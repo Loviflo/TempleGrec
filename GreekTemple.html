@@ -4,8 +4,15 @@
 		<title>Greek Temple</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="style.css">
 	</head>
 	<body>
+
+		<div id="info">
+			TP 3<br />
+			Thomas d'Oncieu, Matthieu Linel, Alexis Moyse and Vivian Ruhlmann
+		</div>
+
 		<script type="module">
 
 			import * as THREE from '../three.js-master/build/three.module.js';
@@ -15,6 +22,8 @@
 			import { GUI } from '../three.js-master/examples/jsm/libs/dat.gui.module.js';
 
 			import { OrbitControls } from '../three.js-master/examples/jsm/controls/OrbitControls.js';
+			
+			import { FBXLoader } from '../three.js-master/examples/jsm/loaders/FBXLoader.js';
 
 //---------------------------------------------------Variables---------------------------------------------------//
 
@@ -23,6 +32,8 @@
 			let scene, renderer; // Scène et rendu
 			let gui; // Interface graphique
 			let container, stats; // Moniteur de performance
+			let mixer;
+			const clock = new THREE.Clock();
 			// Colonne
 			let baseRadius = 75; // Rayon de la base
 			let topRadius = 50; // Rayon du sommet
@@ -272,6 +283,48 @@
 				Surprise.visible = false; // L'objet est invisible
 				scene.add(Surprise);
 
+//-----------------------------------------------------Model-----------------------------------------------------//
+				
+				const loader3D = new FBXLoader();
+				loader3D.load( 'Models/fbx/Crouching.fbx', function ( object ) { // Personnage accroupi
+
+					mixer = new THREE.AnimationMixer( object );
+
+					const action = mixer.clipAction( object.animations[ 0 ] );
+					action.play();
+
+					object.traverse( function ( child ) {
+
+						if ( child.isMesh ) {
+
+							child.castShadow = true;
+							child.receiveShadow = true;
+
+						}
+
+					} );
+					object.position.set(850,990,-70);
+					object.rotation.set(0,0,0);
+					scene.add( object );
+
+				} );
+
+				loader3D.load('Models/fbx/Ikaros.fbx', function(object) { // Aigle
+					object.traverse( function ( child ) {
+
+					if ( child.isMesh ) {
+
+						child.castShadow = true;
+						child.receiveShadow = true;
+
+					}
+
+					} );
+					object.scale.set(0.5,0.5,0.5);
+					object.position.set(700,1100,0);
+					scene.add(object);
+				});
+
 //-----------------------------------------------------Rendu-----------------------------------------------------//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -316,6 +369,9 @@
 					zSurprise = -zSurprise; // Inversement de la valeur
 					zCamera = - zCamera; // Inversement de la valeur
 				}
+
+				const delta = clock.getDelta();
+				if ( mixer ) mixer.update( delta );
 
 				stats.update();
 				render();
