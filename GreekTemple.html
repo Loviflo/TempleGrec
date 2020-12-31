@@ -8,8 +8,18 @@
 </head>
 <body>
 
+<script src="Script.js"></script>
+
+<div id="myNav" class="overlay">
+	<div class="overlay-content">
+		<a href="javascript:void(0)" onclick="closeNav()">Jouer</a>
+		<p>Bonjour, voici notre projet de temple grec.<p>
+		<p>Alexis Moyse, Matthieu Linel, Thomas D'oncieu et Vivian Ruhlmann</p>
+	</div>
+</div>
+
 <div id="info">
-	TP 3<br />
+	TP Final<br />
 	Thomas d'Oncieu, Matthieu Linel, Alexis Moyse and Vivian Ruhlmann
 </div>
 
@@ -475,6 +485,12 @@
 	render();
 
 </script>
-
+<script>
+	document.getElementById("myNav").style.height = "100%";
+	
+	function closeNav() {
+	  document.getElementById("myNav").style.height = "0%";
+	}
+</script>
 </body>
 </html>
